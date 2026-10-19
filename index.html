@@ -1,0 +1,261 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#e84383">
+  <title>Lovely ❤️ - Fais une belle rencontre</title>
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #fff0f6, #ffd6e7);
+      color: #492438;
+      min-height: 100vh;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px;
+      background: white;
+    }
+
+    .logo {
+      font-size: 28px;
+      font-weight: bold;
+      color: #e84383;
+    }
+
+    button {
+      border: none;
+      border-radius: 25px;
+      padding: 12px 20px;
+      background: #e84383;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    main {
+      max-width: 480px;
+      margin: 35px auto;
+      padding: 20px;
+    }
+
+    .hero {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .hero h1 {
+      font-size: 38px;
+      margin-bottom: 12px;
+    }
+
+    .hero h1 span { color: #e84383; }
+
+    .hero p {
+      color: #80576d;
+      line-height: 1.7;
+    }
+
+    .card {
+      background: white;
+      padding: 25px;
+      border-radius: 25px;
+      box-shadow: 0 10px 35px #9d37651c;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .tabs button {
+      flex: 1;
+      background: #ffe5ef;
+      color: #a52d65;
+    }
+
+    .tabs button.active {
+      background: #e84383;
+      color: white;
+    }
+
+    label {
+      display: block;
+      margin: 14px 0 7px;
+      font-weight: bold;
+    }
+
+    input {
+      width: 100%;
+      padding: 13px;
+      border: 1px solid #f0c5d7;
+      border-radius: 12px;
+      font-size: 16px;
+      background: #fffafd;
+    }
+
+    .terms {
+      display: flex;
+      gap: 9px;
+      align-items: flex-start;
+      font-size: 13px;
+      line-height: 1.5;
+      margin: 17px 0;
+    }
+
+    .terms input {
+      width: auto;
+      margin-top: 3px;
+    }
+
+    .submit {
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    #message {
+      display: none;
+      margin-top: 15px;
+      padding: 12px;
+      border-radius: 12px;
+      background: #fff0f6;
+      line-height: 1.5;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      color: #80576d;
+      font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">♡ Lovely</div>
+  <button onclick="setMode('login')">Connexion</button>
+</header>
+
+<main>
+  <section class="hero">
+    <h1>L'amour est <span>tout près ❤️</span></h1>
+    <p>
+      Bienvenue sur Lovely ! Fais de nouvelles rencontres,
+      découvre des personnes et peut-être trouve le grand amour.
+    </p>
+  </section>
+
+  <section class="card">
+    <h2 id="title">Créer un compte</h2>
+    <p id="subtitle">Rejoins notre communauté romantique.</p>
+
+    <div class="tabs">
+      <button id="signupTab" class="active"
+        onclick="setMode('signup')">Inscription</button>
+      <button id="loginTab"
+        onclick="setMode('login')">Connexion</button>
+    </div>
+
+    <form id="accountForm">
+      <div id="nameField">
+        <label for="name">Ton prénom</label>
+        <input id="name" type="text"
+          placeholder="Ton prénom" maxlength="40" required>
+      </div>
+
+      <label for="email">Adresse e-mail</label>
+      <input id="email" type="email"
+        placeholder="nom@exemple.com" required>
+
+      <label for="password">Mot de passe</label>
+      <input id="password" type="password"
+        placeholder="8 caractères minimum"
+        minlength="8" required>
+
+      <div class="terms" id="termsRow">
+        <input type="checkbox" id="terms" required>
+        <label for="terms" style="margin:0;font-weight:normal">
+          J'accepte les conditions d'utilisation et confirme
+          avoir l'âge légal requis dans mon pays.
+        </label>
+      </div>
+
+      <button class="submit" type="submit" id="submitBtn">
+        Créer mon compte ♡
+      </button>
+
+      <div id="message" role="status"></div>
+    </form>
+  </section>
+</main>
+
+<footer>
+  Fait avec ❤️ pour Lovely — Chaque histoire commence quelque part.
+</footer>
+
+<script>
+  let mode = "signup";
+
+  function setMode(nextMode) {
+    mode = nextMode;
+
+    const signup = mode === "signup";
+
+    document.getElementById("nameField").style.display =
+      signup ? "block" : "none";
+
+    document.getElementById("termsRow").style.display =
+      signup ? "flex" : "none";
+
+    document.getElementById("name").required = signup;
+    document.getElementById("terms").required = signup;
+
+    document.getElementById("title").textContent =
+      signup ? "Créer un compte" : "Content de te revoir";
+
+    document.getElementById("subtitle").textContent =
+      signup
+        ? "Rejoins notre communauté romantique."
+        : "Connecte-toi à ton compte Lovely.";
+
+    document.getElementById("submitBtn").textContent =
+      signup ? "Créer mon compte ♡" : "Se connecter";
+
+    document.getElementById("signupTab").classList.toggle(
+      "active", signup
+    );
+
+    document.getElementById("loginTab").classList.toggle(
+      "active", !signup
+    );
+
+    document.getElementById("message").style.display = "none";
+  }
+
+  document.getElementById("accountForm").addEventListener(
+    "submit", function(event) {
+      event.preventDefault();
+
+      const message = document.getElementById("message");
+
+      message.textContent = mode === "signup"
+        ? "La page fonctionne ! Pour créer un vrai compte, il faut connecter une base de données sécurisée."
+        : "Le formulaire fonctionne ! La connexion réelle doit être configurée avec un service d'authentification.";
+
+      message.style.display = "block";
+    }
+  );
+</script>
+
+</body>
+</html>
