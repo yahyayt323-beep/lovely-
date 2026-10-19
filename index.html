@@ -4,260 +4,741 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#e84383">
-  <title>Lovely ❤️ - Fais une belle rencontre</title>
+  <title>Lovely - Rencontres</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <style>
+    :root {
+      --pink: #ec4899;
+      --dark-pink: #db2777;
+      --background: #fff5f9;
+      --text: #342330;
+      --muted: #806b79;
+      --border: #f1dce7;
+      --white: #ffffff;
+    }
+
     * { box-sizing: border-box; }
 
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background: linear-gradient(135deg, #fff0f6, #ffd6e7);
-      color: #492438;
+      background: linear-gradient(135deg, #fff5f9, #ffe4ef);
+      color: var(--text);
       min-height: 100vh;
     }
 
     header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
       padding: 20px;
+      text-align: center;
       background: white;
+      border-bottom: 1px solid var(--border);
     }
 
     .logo {
-      font-size: 28px;
-      font-weight: bold;
-      color: #e84383;
+      font-size: 30px;
+      font-weight: 800;
+      color: var(--pink);
+      letter-spacing: -1px;
     }
 
-    button {
-      border: none;
-      border-radius: 25px;
-      padding: 12px 20px;
-      background: #e84383;
-      color: white;
-      font-size: 16px;
-      cursor: pointer;
+    header p {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 14px;
     }
 
     main {
-      max-width: 480px;
-      margin: 35px auto;
-      padding: 20px;
-    }
-
-    .hero {
-      text-align: center;
-      margin-bottom: 28px;
-    }
-
-    .hero h1 {
-      font-size: 38px;
-      margin-bottom: 12px;
-    }
-
-    .hero h1 span { color: #e84383; }
-
-    .hero p {
-      color: #80576d;
-      line-height: 1.7;
+      width: min(100% - 28px, 520px);
+      margin: 28px auto;
     }
 
     .card {
-      background: white;
-      padding: 25px;
-      border-radius: 25px;
-      box-shadow: 0 10px 35px #9d37651c;
-    }
-
-    .tabs {
-      display: flex;
-      gap: 8px;
+      background: var(--white);
+      padding: 24px;
+      border-radius: 20px;
+      box-shadow: 0 10px 35px #b82b6812;
+      border: 1px solid var(--border);
       margin-bottom: 20px;
     }
 
-    .tabs button {
-      flex: 1;
-      background: #ffe5ef;
-      color: #a52d65;
+    h1, h2 {
+      margin-top: 0;
+      text-align: center;
     }
 
-    .tabs button.active {
-      background: #e84383;
-      color: white;
+    h1 { font-size: 25px; }
+    h2 { font-size: 21px; }
+
+    .subtitle {
+      text-align: center;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.6;
     }
 
     label {
       display: block;
-      margin: 14px 0 7px;
-      font-weight: bold;
+      font-size: 14px;
+      font-weight: 700;
+      margin: 15px 0 7px;
     }
 
-    input {
+    input, textarea {
       width: 100%;
       padding: 13px;
-      border: 1px solid #f0c5d7;
-      border-radius: 12px;
-      font-size: 16px;
+      border: 1px solid var(--border);
+      border-radius: 11px;
+      font: inherit;
       background: #fffafd;
+      outline: none;
     }
 
-    .terms {
-      display: flex;
-      gap: 9px;
-      align-items: flex-start;
-      font-size: 13px;
-      line-height: 1.5;
-      margin: 17px 0;
+    input:focus, textarea:focus {
+      border-color: var(--pink);
+      box-shadow: 0 0 0 3px #ec489918;
     }
 
-    .terms input {
-      width: auto;
-      margin-top: 3px;
+    textarea {
+      min-height: 95px;
+      resize: vertical;
     }
 
-    .submit {
+    button {
+      border: 0;
+      border-radius: 11px;
+      padding: 13px 16px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    button:disabled {
+      opacity: .6;
+      cursor: not-allowed;
+    }
+
+    .primary {
+      background: var(--pink);
+      color: white;
       width: 100%;
-      margin-top: 10px;
+      margin-top: 18px;
     }
 
-    #message {
-      display: none;
-      margin-top: 15px;
-      padding: 12px;
-      border-radius: 12px;
+    .primary:hover { background: var(--dark-pink); }
+
+    .secondary {
       background: #fff0f6;
+      color: var(--dark-pink);
+      width: 100%;
+      margin-top: 12px;
+    }
+
+    .switch {
+      text-align: center;
+      margin-top: 18px;
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .switch button {
+      padding: 3px;
+      background: transparent;
+      color: var(--dark-pink);
+    }
+
+    .message {
+      display: none;
+      padding: 12px;
+      border-radius: 10px;
+      font-size: 14px;
       line-height: 1.5;
+      margin-bottom: 15px;
+      overflow-wrap: anywhere;
+    }
+
+    .message.show { display: block; }
+    .message.success { background: #e9f9ef; color: #17683a; }
+    .message.error { background: #fff0f0; color: #a21b32; }
+    .message.info { background: #eff6ff; color: #1d4e89; }
+
+    .hidden { display: none !important; }
+
+    .account-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+    }
+
+    .account-bar strong {
+      overflow-wrap: anywhere;
+    }
+
+    .small-button {
+      padding: 9px 12px;
+      background: #fff0f6;
+      color: var(--dark-pink);
+    }
+
+    .avatar {
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      object-fit: cover;
+      display: block;
+      margin: 0 auto 15px;
+      border: 4px solid #ffe0ed;
+      background: #fff0f6;
+    }
+
+    .hint {
+      font-size: 12px;
+      line-height: 1.5;
+      color: var(--muted);
+      margin-top: 7px;
     }
 
     footer {
       text-align: center;
       padding: 20px;
-      color: #80576d;
-      font-size: 13px;
+      font-size: 12px;
+      color: var(--muted);
     }
   </style>
 </head>
+
 <body>
+  <header>
+    <div class="logo">♡ Lovely</div>
+    <p>Faites de belles rencontres</p>
+  </header>
 
-<header>
-  <div class="logo">♡ Lovely</div>
-  <button onclick="setMode('login')">Connexion</button>
-</header>
+  <main>
+    <div id="notice" class="message" role="status" aria-live="polite"></div>
 
-<main>
-  <section class="hero">
-    <h1>L'amour est <span>tout près ❤️</span></h1>
-    <p>
-      Bienvenue sur Lovely ! Fais de nouvelles rencontres,
-      découvre des personnes et peut-être trouve le grand amour.
-    </p>
-  </section>
+    <!-- Connexion et inscription -->
+    <section id="authCard" class="card">
+      <h1 id="authTitle">Créer un compte</h1>
+      <p class="subtitle" id="authSubtitle">
+        Rejoignez Lovely et créez votre profil.
+      </p>
 
-  <section class="card">
-    <h2 id="title">Créer un compte</h2>
-    <p id="subtitle">Rejoins notre communauté romantique.</p>
+      <form id="authForm">
+        <div id="signupFields">
+          <label for="name">Votre prénom</label>
+          <input
+            id="name"
+            type="text"
+            maxlength="60"
+            autocomplete="given-name"
+            placeholder="Ex. Sara"
+            required
+          >
 
-    <div class="tabs">
-      <button id="signupTab" class="active"
-        onclick="setMode('signup')">Inscription</button>
-      <button id="loginTab"
-        onclick="setMode('login')">Connexion</button>
-    </div>
+          <label for="age">Votre âge</label>
+          <input
+            id="age"
+            type="number"
+            min="18"
+            max="100"
+            inputmode="numeric"
+            placeholder="18 ou plus"
+            required
+          >
+        </div>
 
-    <form id="accountForm">
-      <div id="nameField">
-        <label for="name">Ton prénom</label>
-        <input id="name" type="text"
-          placeholder="Ton prénom" maxlength="40" required>
+        <label for="email">Adresse e-mail</label>
+        <input
+          id="email"
+          type="email"
+          autocomplete="email"
+          placeholder="vous@exemple.com"
+          required
+        >
+
+        <label for="password">Mot de passe</label>
+        <input
+          id="password"
+          type="password"
+          minlength="6"
+          autocomplete="current-password"
+          placeholder="6 caractères minimum"
+          required
+        >
+
+        <button id="authSubmit" class="primary" type="submit">
+          Créer mon compte
+        </button>
+      </form>
+
+      <div class="switch">
+        <span id="switchText">Vous avez déjà un compte ?</span>
+        <button id="switchMode" type="button">Se connecter</button>
+      </div>
+    </section>
+
+    <!-- Profil utilisateur -->
+    <section id="profileCard" class="card hidden">
+      <div class="account-bar">
+        <strong id="signedInEmail"></strong>
+        <button id="logoutButton" class="small-button" type="button">
+          Déconnexion
+        </button>
       </div>
 
-      <label for="email">Adresse e-mail</label>
-      <input id="email" type="email"
-        placeholder="nom@exemple.com" required>
+      <h2>Mon profil Lovely</h2>
+      <p class="subtitle">Ajoutez une photo et présentez-vous.</p>
 
-      <label for="password">Mot de passe</label>
-      <input id="password" type="password"
-        placeholder="8 caractères minimum"
-        minlength="8" required>
+      <img
+        id="avatarPreview"
+        class="avatar"
+        alt="Photo de profil"
+        src="https://placehold.co/220x220/fce7f3/be185d?text=Lovely"
+      >
 
-      <div class="terms" id="termsRow">
-        <input type="checkbox" id="terms" required>
-        <label for="terms" style="margin:0;font-weight:normal">
-          J'accepte les conditions d'utilisation et confirme
-          avoir l'âge légal requis dans mon pays.
-        </label>
-      </div>
+      <form id="profileForm">
+        <label for="profileName">Prénom</label>
+        <input
+          id="profileName"
+          type="text"
+          maxlength="60"
+          autocomplete="given-name"
+          required
+        >
 
-      <button class="submit" type="submit" id="submitBtn">
-        Créer mon compte ♡
-      </button>
+        <label for="profileAge">Âge</label>
+        <input
+          id="profileAge"
+          type="number"
+          min="18"
+          max="100"
+          required
+        >
 
-      <div id="message" role="status"></div>
-    </form>
-  </section>
-</main>
+        <label for="bio">À propos de moi</label>
+        <textarea
+          id="bio"
+          maxlength="500"
+          placeholder="Parlez un peu de vous..."
+        ></textarea>
 
-<footer>
-  Fait avec ❤️ pour Lovely — Chaque histoire commence quelque part.
-</footer>
+        <label for="avatarFile">Photo de profil</label>
+        <input
+          id="avatarFile"
+          type="file"
+          accept="image/jpeg,image/png,image/webp"
+        >
+        <p class="hint">
+          Formats acceptés : JPG, PNG ou WebP. Taille maximale : 3 Mo.
+        </p>
 
-<script>
-  let mode = "signup";
+        <button id="saveProfileButton" class="primary" type="submit">
+          Enregistrer mon profil
+        </button>
+      </form>
+    </section>
+  </main>
 
-  function setMode(nextMode) {
-    mode = nextMode;
+  <footer>Lovely © 2026 · Rencontres respectueuses et sécurisées</footer>
 
-    const signup = mode === "signup";
+  <script>
+    "use strict";
 
-    document.getElementById("nameField").style.display =
-      signup ? "block" : "none";
+    // 1. Configuration Supabase
+    const SUPABASE_URL = "https://tmarzbmxteddwzliluba.supabase.co";
+    const SUPABASE_PUBLISHABLE_KEY =
+      "sb_publishable_C6a8W0g77SAW-M9TNZLeWA_8_N71VT-";
 
-    document.getElementById("termsRow").style.display =
-      signup ? "flex" : "none";
-
-    document.getElementById("name").required = signup;
-    document.getElementById("terms").required = signup;
-
-    document.getElementById("title").textContent =
-      signup ? "Créer un compte" : "Content de te revoir";
-
-    document.getElementById("subtitle").textContent =
-      signup
-        ? "Rejoins notre communauté romantique."
-        : "Connecte-toi à ton compte Lovely.";
-
-    document.getElementById("submitBtn").textContent =
-      signup ? "Créer mon compte ♡" : "Se connecter";
-
-    document.getElementById("signupTab").classList.toggle(
-      "active", signup
+    const supabaseClient = window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_PUBLISHABLE_KEY
     );
 
-    document.getElementById("loginTab").classList.toggle(
-      "active", !signup
-    );
+    // 2. Éléments de la page
+    const authCard = document.getElementById("authCard");
+    const profileCard = document.getElementById("profileCard");
+    const authForm = document.getElementById("authForm");
+    const profileForm = document.getElementById("profileForm");
+    const notice = document.getElementById("notice");
 
-    document.getElementById("message").style.display = "none";
-  }
+    const authTitle = document.getElementById("authTitle");
+    const authSubtitle = document.getElementById("authSubtitle");
+    const signupFields = document.getElementById("signupFields");
+    const authSubmit = document.getElementById("authSubmit");
+    const switchText = document.getElementById("switchText");
+    const switchMode = document.getElementById("switchMode");
 
-  document.getElementById("accountForm").addEventListener(
-    "submit", function(event) {
-      event.preventDefault();
+    const nameInput = document.getElementById("name");
+    const ageInput = document.getElementById("age");
+    const emailInput = document.getElementById("email");
+    const passwordInput = document.getElementById("password");
 
-      const message = document.getElementById("message");
+    const profileName = document.getElementById("profileName");
+    const profileAge = document.getElementById("profileAge");
+    const bioInput = document.getElementById("bio");
+    const avatarFile = document.getElementById("avatarFile");
+    const avatarPreview = document.getElementById("avatarPreview");
 
-      message.textContent = mode === "signup"
-        ? "La page fonctionne ! Pour créer un vrai compte, il faut connecter une base de données sécurisée."
-        : "Le formulaire fonctionne ! La connexion réelle doit être configurée avec un service d'authentification.";
+    let mode = "signup";
+    let currentUser = null;
+    let currentAvatarUrl = null;
 
-      message.style.display = "block";
+    // 3. Affichage des messages
+    function showMessage(message, type = "info") {
+      notice.textContent = message;
+      notice.className = "message show " + type;
+      notice.scrollIntoView({ behavior: "smooth", block: "nearest" });
     }
-  );
-</script>
 
-sb_publishable_C6a8W0g77SAW-M9TNZLeWA_8_N71VT-
+    function clearMessage() {
+      notice.textContent = "";
+      notice.className = "message";
+    }
 
-</body>
-</html>
+    function friendlyError(error) {
+      const message = error?.message || "Une erreur est survenue.";
+
+      if (/invalid login credentials/i.test(message)) {
+        return "E-mail ou mot de passe incorrect.";
+      }
+
+      if (/user already registered/i.test(message)) {
+        return "Cette adresse e-mail possède déjà un compte. Connectez-vous.";
+      }
+
+      if (/email not confirmed/i.test(message)) {
+        return "Confirmez votre adresse e-mail avant de vous connecter.";
+      }
+
+      if (/row-level security|permission denied/i.test(message)) {
+        return "Accès refusé par les politiques RLS. Vérifiez les politiques Supabase.";
+      }
+
+      return message;
+    }
+
+    function setBusy(button, busy, busyText, normalText) {
+      button.disabled = busy;
+      button.textContent = busy ? busyText : normalText;
+    }
+
+    // 4. Changer entre inscription et connexion
+    function setMode(nextMode) {
+      mode = nextMode;
+      const isSignup = mode === "signup";
+
+      authTitle.textContent = isSignup ? "Créer un compte" : "Connexion";
+      authSubtitle.textContent = isSignup
+        ? "Rejoignez Lovely et créez votre profil."
+        : "Connectez-vous pour retrouver votre profil.";
+
+      signupFields.classList.toggle("hidden", !isSignup);
+      nameInput.required = isSignup;
+      ageInput.required = isSignup;
+      passwordInput.autocomplete = isSignup
+        ? "new-password"
+        : "current-password";
+
+      authSubmit.textContent = isSignup
+        ? "Créer mon compte"
+        : "Se connecter";
+
+      switchText.textContent = isSignup
+        ? "Vous avez déjà un compte ?"
+        : "Vous n'avez pas de compte ?";
+
+      switchMode.textContent = isSignup
+        ? "Se connecter"
+        : "Créer un compte";
+
+      clearMessage();
+    }
+
+    switchMode.addEventListener("click", () => {
+      setMode(mode === "signup" ? "login" : "signup");
+    });
+
+    // 5. Créer ou mettre à jour le profil en base
+    async function ensureProfile(user, extra = {}) {
+      const metadata = user.user_metadata || {};
+
+      const profile = {
+        id: user.id,
+        name: extra.name ?? metadata.name ?? "",
+        age: extra.age ?? metadata.age ?? null,
+        bio: extra.bio ?? "",
+        avatar_url: extra.avatar_url ?? null
+      };
+
+      const { error } = await supabaseClient
+        .from("profiles")
+        .upsert(profile, { onConflict: "id" });
+
+      if (error) throw error;
+    }
+
+    // 6. Charger le profil existant
+    async function loadProfile(user) {
+      const { data, error } = await supabaseClient
+        .from("profiles")
+        .select("id, name, age, bio, avatar_url")
+        .eq("id", user.id)
+        .maybeSingle();
+
+      if (error) throw error;
+
+      // Première connexion après confirmation d'e-mail :
+      // créer la ligne de profil à partir des métadonnées du compte.
+      if (!data) {
+        await ensureProfile(user);
+        return loadProfile(user);
+      }
+
+      profileName.value = data.name || user.user_metadata?.name || "";
+      profileAge.value = data.age || user.user_metadata?.age || "";
+      bioInput.value = data.bio || "";
+
+      currentAvatarUrl = data.avatar_url || null;
+      avatarPreview.src = currentAvatarUrl ||
+        "https://placehold.co/220x220/fce7f3/be185d?text=Lovely";
+    }
+
+    // 7. Afficher l'espace correspondant à l'état de connexion
+    async function renderSession(user) {
+      currentUser = user || null;
+      clearMessage();
+
+      if (!user) {
+        authCard.classList.remove("hidden");
+        profileCard.classList.add("hidden");
+        return;
+      }
+
+      authCard.classList.add("hidden");
+      profileCard.classList.remove("hidden");
+      document.getElementById("signedInEmail").textContent =
+        user.email || "Compte Lovely";
+
+      try {
+        await loadProfile(user);
+      } catch (error) {
+        console.error("Erreur de chargement du profil:", error);
+        showMessage(
+          "Connecté, mais impossible de charger le profil : " +
+          friendlyError(error),
+          "error"
+        );
+      }
+    }
+
+    // 8. Inscription et connexion
+    authForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      clearMessage();
+
+      const email = emailInput.value.trim();
+      const password = passwordInput.value;
+
+      setBusy(authSubmit, true, "Veuillez patienter...", 
+        mode === "signup" ? "Créer mon compte" : "Se connecter");
+
+      try {
+        if (mode === "signup") {
+          const name = nameInput.value.trim();
+          const age = Number(ageInput.value);
+
+          if (!name) throw new Error("Entrez votre prénom.");
+          if (!Number.isInteger(age) || age < 18 || age > 100) {
+            throw new Error("Vous devez avoir au moins 18 ans.");
+          }
+
+          if (password.length < 6) {
+            throw new Error("Le mot de passe doit contenir au moins 6 caractères.");
+          }
+
+          const { data, error } = await supabaseClient.auth.signUp({
+            email,
+            password,
+            options: {
+              data: { name, age }
+            }
+          });
+
+          if (error) throw error;
+
+          if (data.session && data.user) {
+            await ensureProfile(data.user, { name, age });
+            await renderSession(data.user);
+            showMessage("Bienvenue sur Lovely ! Votre compte est créé.", "success");
+          } else {
+            setMode("login");
+            emailInput.value = email;
+            showMessage(
+              "Compte créé ! Consultez votre boîte e-mail, confirmez votre adresse, puis connectez-vous.",
+              "success"
+            );
+          }
+        } else {
+          const { data, error } =
+            await supabaseClient.auth.signInWithPassword({
+              email,
+              password
+            });
+
+          if (error) throw error;
+
+          await ensureProfile(data.user);
+          await renderSession(data.user);
+          showMessage("Connexion réussie. Bienvenue sur Lovely !", "success");
+        }
+      } catch (error) {
+        console.error("Erreur d'authentification:", error);
+        showMessage(friendlyError(error), "error");
+      } finally {
+        setBusy(
+          authSubmit,
+          false,
+          "",
+          mode === "signup" ? "Créer mon compte" : "Se connecter"
+        );
+      }
+    });
+
+    // 9. Aperçu de la photo sélectionnée
+    avatarFile.addEventListener("change", () => {
+      const file = avatarFile.files?.[0];
+      if (!file) return;
+
+      if (!["image/jpeg", "image/png", "image/webp"].includes(file.type)) {
+        avatarFile.value = "";
+        showMessage("Choisissez une image JPG, PNG ou WebP.", "error");
+        return;
+      }
+
+      if (file.size > 3 * 1024 * 1024) {
+        avatarFile.value = "";
+        showMessage("La photo doit faire moins de 3 Mo.", "error");
+        return;
+      }
+
+      avatarPreview.src = URL.createObjectURL(file);
+      clearMessage();
+    });
+
+    // 10. Enregistrer le profil et téléverser la photo si nécessaire
+    profileForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      clearMessage();
+
+      if (!currentUser) {
+        showMessage("Connectez-vous avant d'enregistrer votre profil.", "error");
+        return;
+      }
+
+      const name = profileName.value.trim();
+      const age = Number(profileAge.value);
+      const bio = bioInput.value.trim();
+      const file = avatarFile.files?.[0];
+      const saveButton = document.getElementById("saveProfileButton");
+
+      if (!name) {
+        showMessage("Entrez votre prénom.", "error");
+        return;
+      }
+
+      if (!Number.isInteger(age) || age < 18 || age > 100) {
+        showMessage("L'âge doit être compris entre 18 et 100 ans.", "error");
+        return;
+      }
+
+      setBusy(saveButton, true, "Enregistrement...", "Enregistrer mon profil");
+
+      try {
+        let avatarUrl = currentAvatarUrl;
+
+        if (file) {
+          const extension = file.type === "image/png" ? "png" :
+            file.type === "image/webp" ? "webp" : "jpg";
+
+          const path = currentUser.id + "/" + Date.now() + "." + extension;
+
+          const { error: uploadError } = await supabaseClient
+            .storage
+            .from("avatars")
+            .upload(path, file, {
+              contentType: file.type,
+              upsert: false
+            });
+
+          if (uploadError) throw uploadError;
+
+          const { data: publicData } = supabaseClient
+            .storage
+            .from("avatars")
+            .getPublicUrl(path);
+
+          avatarUrl = publicData.publicUrl;
+        }
+
+        const { error: profileError } = await supabaseClient
+          .from("profiles")
+          .upsert({
+            id: currentUser.id,
+            name,
+            age,
+            bio,
+            avatar_url: avatarUrl
+          }, { onConflict: "id" });
+
+        if (profileError) throw profileError;
+
+        currentAvatarUrl = avatarUrl;
+        avatarFile.value = "";
+
+        if (avatarUrl) avatarPreview.src = avatarUrl;
+
+        // Garder aussi les données de base à jour dans les métadonnées.
+        const { error: metadataError } = await supabaseClient.auth.updateUser({
+          data: { name, age }
+        });
+
+        if (metadataError) {
+          console.warn("Profil enregistré, mais métadonnées non actualisées:", metadataError);
+        }
+
+        showMessage("Votre profil a été enregistré avec succès !", "success");
+      } catch (error) {
+        console.error("Erreur d'enregistrement du profil:", error);
+        showMessage(friendlyError(error), "error");
+      } finally {
+        setBusy(saveButton, false, "", "Enregistrer mon profil");
+      }
+    });
+
+    // 11. Déconnexion
+    document.getElementById("logoutButton").addEventListener("click", async () => {
+      const button = document.getElementById("logoutButton");
+      button.disabled = true;
+
+      try {
+        const { error } = await supabaseClient.auth.signOut();
+        if (error) throw error;
+
+        currentUser = null;
+        profileForm.reset();
+        authForm.reset();
+        setMode("login");
+        await renderSession(null);
+        showMessage("Vous êtes déconnecté.", "success");
+      } catch (error) {
+        showMessage(friendlyError(error), "error");
+      } finally {
+        button.disabled = false;
+      }
+    });
+
+    // 12. Restaurer la session lors du chargement
