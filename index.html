@@ -7,221 +7,189 @@
 <meta name="theme-color" content="#ec4899">
 <title>Lovely ❤️ - Rencontres</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <style>
-:root {
-  --pink:#ec4899;
-  --dark:#db2777;
-  --bg:#fff5fa;
-  --text:#342330;
-  --muted:#897585;
-  --border:#f1dce7;
-}
+:root{--pink:#ec4899;--dark:#db2777;--bg:#fff3f8;--text:#342330;--muted:#806b79;--border:#f1dce7}
 *{box-sizing:border-box}
-body{margin:0;font-family:Arial,sans-serif;color:var(--text);background:linear-gradient(135deg,#fffafd,#fff0f7)}
+body{margin:0;font-family:Arial,sans-serif;color:var(--text);background:linear-gradient(135deg,#fff7fb,#ffe4ef)}
 button,input,textarea{font:inherit}
-button{cursor:pointer;border:0;border-radius:12px;padding:11px 15px;font-weight:bold}
+button{border:0;border-radius:11px;padding:12px 15px;font-weight:bold;cursor:pointer}
 button:disabled{opacity:.6}
 .hidden{display:none!important}
-header{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:15px 22px;background:white;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:5}
-.logo{font-size:27px;font-weight:900;color:var(--pink)}
-.tagline{color:var(--muted);margin-top:5px}
-.user{display:flex;align-items:center;gap:9px}
-.user img{width:40px;height:40px;border-radius:50%;object-fit:cover}
 .primary{background:var(--pink);color:white}
-.primary:hover{background:var(--dark)}
 .secondary{background:#fff0f6;color:var(--dark)}
-.layout{display:grid;grid-template-columns:190px minmax(0,1fr) 310px;min-height:80vh}
-nav{padding:20px 12px;border-right:1px solid var(--border);background:#ffffffa8}
-.navbtn{display:block;width:100%;text-align:left;background:transparent;margin-bottom:8px;color:var(--text)}
+header{background:white;border-bottom:1px solid var(--border);padding:18px 16px}
+.header-inner{max-width:1100px;margin:auto;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.logo{font-size:28px;font-weight:900;color:var(--pink)}
+.tagline{color:var(--muted);margin-top:5px}
+.account{display:flex;align-items:center;gap:8px}
+.account img{width:38px;height:38px;object-fit:cover;border-radius:50%}
+#notice{max-width:1000px;margin:15px auto;padding:13px;border-radius:12px;line-height:1.5}
+.success{background:#e9f9ef;color:#17683a}
+.error{background:#fff0f0;color:#a21b32}
+.info{background:#eff6ff;color:#1d4e89}
+.card{background:white;border:1px solid var(--border);border-radius:22px;padding:22px;box-shadow:0 10px 35px #b82b6810;margin-bottom:18px}
+.auth{max-width:500px;margin:28px auto}
+main{max-width:1100px;margin:20px auto;padding:0 12px;min-width:0}
+h1,h2{text-align:center}
+.subtitle{text-align:center;color:var(--muted);line-height:1.6}
+label{display:block;margin:15px 0 7px;font-weight:bold}
+input,textarea{width:100%;padding:13px;border:1px solid var(--border);border-radius:11px;background:#fffafd;color:var(--text)}
+textarea{min-height:90px}
+.full{width:100%;margin-top:16px}
+.switch{text-align:center;margin-top:16px;color:var(--muted)}
+.switch button{background:transparent;color:var(--dark)}
+.layout{max-width:1100px;margin:20px auto;padding:0 12px;display:grid;grid-template-columns:180px minmax(0,1fr);gap:18px}
+.sidebar{background:white;border:1px solid var(--border);border-radius:16px;padding:10px;height:max-content}
+.navbtn{display:block;width:100%;text-align:left;background:transparent;margin:3px 0;color:var(--text)}
 .navbtn.active{background:var(--pink);color:white}
-main{padding:20px;min-width:0}
-.hero{padding:22px;background:linear-gradient(110deg,#ec3290,#f785bd);color:white;border-radius:16px;margin-bottom:18px}
-.hero h1{font-size:22px;margin:0 0 8px}
-.hero p{margin:0;line-height:1.5}
-.filters{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0}
-.filter{background:white;color:var(--text);border:1px solid var(--border);border-radius:25px}
+.hero{background:linear-gradient(110deg,#ec3290,#f785bd);color:white;padding:22px;border-radius:16px;margin-bottom:18px}
+.hero h1{margin-top:0;font-size:23px}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin:15px 0}
+.filter{background:white;border:1px solid var(--border);border-radius:25px}
 .filter.active{background:var(--pink);color:white}
 .profiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}
 .person{background:white;border:1px solid var(--border);border-radius:15px;overflow:hidden;min-width:0}
-.person>img{width:100%;height:190px;object-fit:cover;display:block;background:#fce7f3}
+.person>img{width:100%;height:210px;object-fit:cover;display:block;background:#fce7f3}
 .person-info{padding:12px}
-.person h3{margin:0 0 8px;font-size:17px}
-.meta{font-size:12px;color:var(--muted);margin:7px 0}
-.tags{display:flex;gap:5px;flex-wrap:wrap;margin:10px 0}
-.tag{background:#fff0f6;color:var(--dark);border-radius:20px;padding:5px 8px;font-size:11px}
-.actions{display:flex;justify-content:center;gap:15px;padding:8px}
-.round{width:42px;height:42px;border-radius:50%;background:#f5edf3;color:#70596b;font-size:20px;padding:0}
+.person h3{margin:0 0 7px;font-size:17px}
+.meta,.hint{font-size:12px;color:var(--muted);line-height:1.5}
+.actions{display:flex;justify-content:center;gap:12px;margin-top:10px}
+.round{width:42px;height:42px;border-radius:50%;padding:0;font-size:22px;background:#f5edf3;color:#70596b}
 .round.like{background:var(--pink);color:white}
-.right{padding:20px 12px 20px 0;min-width:0}
-.panel{background:white;border:1px solid var(--border);border-radius:16px;margin-bottom:14px;overflow:hidden}
-.panel h3{font-size:16px;margin:0;padding:15px}
-.match-list{display:flex;gap:12px;justify-content:space-around;padding:0 10px 17px;flex-wrap:wrap}
-.match{width:55px;text-align:center;cursor:pointer;font-size:12px}
-.match img{width:52px;height:52px;object-fit:cover;border-radius:50%;border:2px solid #f9a8d4}
-.chat-list{padding:0 10px 8px}
-.chat-user{display:flex;align-items:center;gap:10px;padding:10px 4px;cursor:pointer;border-radius:10px}
-.chat-user:hover{background:#fff3f9}
-.chat-user img{width:42px;height:42px;object-fit:cover;border-radius:50%}
-.chat-user div{min-width:0}
-.chat-user p{margin:5px 0 0;font-size:12px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.chat-head{padding:12px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border)}
-.chat-head img{width:38px;height:38px;border-radius:50%;object-fit:cover}
-.chat-messages{height:230px;overflow:auto;padding:12px;display:flex;flex-direction:column;gap:10px}
-.bubble{padding:10px 12px;background:#f7eff5;border-radius:14px;max-width:90%;overflow-wrap:anywhere;align-self:flex-start}
+.round.liked{background:#be185d}
+.avatar{display:block;width:112px;height:112px;border-radius:50%;object-fit:cover;margin:18px auto;border:4px solid #ffe0ed}
+.chat-layout{display:grid;grid-template-columns:180px minmax(0,1fr);border:1px solid var(--border);border-radius:15px;overflow:hidden;min-height:340px}
+.chat-list{background:#fff8fc;border-right:1px solid var(--border);padding:8px}
+.chat-user{padding:12px 7px;cursor:pointer;border-radius:10px}
+.chat-user.active,.chat-user:hover{background:#ffe5f0}
+.chat-window{display:flex;flex-direction:column;min-width:0}
+.chat-head{padding:12px;border-bottom:1px solid var(--border)}
+.chat-messages{height:250px;overflow:auto;padding:12px;display:flex;flex-direction:column;gap:9px}
+.bubble{padding:10px 12px;border-radius:14px;max-width:85%;background:#f6edf3;align-self:flex-start;overflow-wrap:anywhere}
 .bubble.mine{background:var(--pink);color:white;align-self:flex-end}
-.message-form{display:flex;gap:6px;padding:10px;border-top:1px solid var(--border)}
-.message-form input{width:100%;min-width:0;border:1px solid var(--border);border-radius:10px;padding:10px}
-.notice{padding:12px;margin:12px 0;border-radius:10px;background:#e9f9ef;color:#17683a;overflow-wrap:anywhere}
-.error{background:#fff0f0;color:#a21b32}
-.auth{width:min(92%,480px);margin:35px auto;background:white;padding:25px;border:1px solid var(--border);border-radius:20px}
-.auth h1,.profile h1{text-align:center}
-.auth label,.profile label{display:block;font-weight:bold;margin:15px 0 7px}
-.auth input,.profile input,.profile textarea{width:100%;padding:13px;border:1px solid var(--border);border-radius:11px;background:#fffafd}
-.auth .primary,.profile .primary{width:100%;margin-top:18px}
-.switch{text-align:center;margin-top:15px;color:var(--muted)}
-.switch button{background:transparent;color:var(--dark)}
-.profile{max-width:500px;margin:20px auto;background:white;border:1px solid var(--border);border-radius:18px;padding:22px}
-.profile textarea{min-height:90px}
-.avatar{display:block;width:110px;height:110px;border-radius:50%;object-fit:cover;margin:15px auto;border:4px solid #ffe0ed}
-footer{text-align:center;padding:22px;color:var(--muted);font-size:12px}
-@media(max-width:1100px){
-.layout{grid-template-columns:155px minmax(0,1fr)}
-.right{grid-column:2;padding:0 18px 20px;display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.right .panel{margin:0}
-.right .conversation{grid-column:1/-1}
-.profiles{grid-template-columns:repeat(3,minmax(0,1fr))}
+.message-form{display:flex;gap:7px;padding:10px;border-top:1px solid var(--border)}
+.message-form input{min-width:0}
+footer{text-align:center;padding:25px;color:var(--muted);font-size:12px}
+@media(max-width:800px){
+.layout{grid-template-columns:1fr}
+.sidebar{display:flex;overflow-x:auto;gap:4px}
+.navbtn{white-space:nowrap;width:auto}
+.profiles{grid-template-columns:repeat(2,minmax(0,1fr))}
+.person>img{height:180px}
 }
-@media(max-width:700px){
-header{padding:13px}.logo{font-size:23px}.tagline{display:none}
-.layout{display:block}
-nav{display:flex;overflow-x:auto;padding:8px;position:sticky;top:66px;z-index:4;border-right:0;border-bottom:1px solid var(--border)}
-.navbtn{width:auto;white-space:nowrap;margin:0 4px;padding:10px;font-size:12px}
-main{padding:13px 10px}
-.hero{padding:17px}.hero h1{font-size:19px}
-.profiles{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
-.person>img{height:175px}
+@media(max-width:420px){
+.logo{font-size:23px}
+.account #headerName{display:none}
+.card{padding:16px}
+.profiles{gap:8px}
+.person>img{height:150px}
 .person-info{padding:9px}
-.right{display:block;padding:0 10px 15px}
-.right .panel{margin-bottom:12px}
+.chat-layout{grid-template-columns:105px minmax(0,1fr)}
 }
-@media(max-width:380px){.person>img{height:145px}.person h3{font-size:15px}}
 </style>
 </head>
-
 <body>
 <header>
-  <div>
-    <div class="logo">♡ LOVELY 💗</div>
-    <div class="tagline">Faites de belles rencontres</div>
-  </div>
-  <div class="user">
-    <img id="headerAvatar" src="https://placehold.co/100x100/fce7f3/be185d?text=L" alt="">
-    <span id="headerName">Lovely</span>
-    <button id="logout" class="secondary hidden">Sortir</button>
-  </div>
+<div class="header-inner">
+<div><div class="logo">♡ LOVELY 💗</div><div class="tagline">Faites de belles rencontres</div></div>
+<div class="account">
+<img id="headerAvatar" src="https://placehold.co/100x100/fce7f3/be185d?text=L" alt="">
+<span id="headerName">Bienvenue</span>
+<button id="logout" class="secondary hidden" type="button">Déconnexion</button>
+</div>
+</div>
 </header>
 
-<div id="notice" class="notice hidden"></div>
+<div id="notice" class="hidden" role="status"></div>
 
-<section id="authArea" class="auth">
-  <h1 id="authTitle">Créer un compte</h1>
-  <p id="authSubtitle" style="text-align:center;color:#897585">Rejoignez Lovely et créez votre profil.</p>
-  <form id="authForm">
-    <div id="signupFields">
-      <label for="name">Prénom</label>
-      <input id="name" maxlength="60" autocomplete="given-name" required>
-      <label for="age">Âge (18 ans minimum)</label>
-      <input id="age" type="number" min="18" max="100" required>
-    </div>
-    <label for="email">Adresse e-mail</label>
-    <input id="email" type="email" autocomplete="email" required>
-    <label for="password">Mot de passe</label>
-    <input id="password" type="password" minlength="6" required>
-    <button id="authSubmit" class="primary" type="submit">Créer mon compte</button>
-  </form>
-  <div class="switch">
-    <span id="switchText">Vous avez déjà un compte ?</span>
-    <button id="switchMode" type="button">Se connecter</button>
-    <p><button id="forgot" type="button">Mot de passe oublié ?</button></p>
-  </div>
+<section id="authCard" class="card auth">
+<h1 id="authTitle">Créer un compte</h1>
+<p id="authSubtitle" class="subtitle">Rejoignez Lovely et créez votre profil.</p>
+<form id="authForm">
+<div id="signupFields">
+<label for="name">Prénom</label>
+<input id="name" maxlength="60" autocomplete="given-name" required>
+<label for="age">Âge (18 ans minimum)</label>
+<input id="age" type="number" min="18" max="100" required>
+</div>
+<label for="email">Adresse e-mail</label>
+<input id="email" type="email" autocomplete="email" required>
+<label for="password">Mot de passe</label>
+<input id="password" type="password" minlength="6" required>
+<button id="authSubmit" class="primary full" type="submit">Créer mon compte</button>
+</form>
+<div class="switch">
+<span id="switchText">Vous avez déjà un compte ?</span>
+<button id="switchMode" type="button">Se connecter</button><br>
+<button id="forgot" type="button">Mot de passe oublié ?</button>
+</div>
 </section>
 
 <div id="app" class="layout hidden">
-  <nav>
-    <button class="navbtn active" data-view="discover">⌂ Découvrir</button>
-    <button class="navbtn" data-view="matches">♥ Mes matchs</button>
-    <button class="navbtn" data-view="messages">▣ Messages</button>
-    <button class="navbtn" data-view="profile">♙ Mon profil</button>
-  </nav>
+<nav class="sidebar">
+<button class="navbtn active" data-view="discover">⌂ Découvrir</button>
+<button class="navbtn" data-view="likes">♥ Mes likes</button>
+<button class="navbtn" data-view="messages">💬 Messages</button>
+<button class="navbtn" data-view="profile">♙ Mon profil</button>
+</nav>
 
-  <main>
-    <section id="discoverView">
-      <div class="hero">
-        <h1>♡ Il y a plein de belles personnes qui vous attendent !</h1>
-        <p>Découvrez, likez et faites le premier pas 💕</p>
-      </div>
-      <div class="filters">
-        <button class="filter active" data-filter="Tous">Tous</button>
-        <button class="filter" data-filter="Femmes">♀ Femmes</button>
-        <button class="filter" data-filter="Hommes">♂ Hommes</button>
-      </div>
-      <div id="profiles" class="profiles"></div>
-    </section>
+<main>
+<section id="discoverView">
+<div class="hero"><h1>Faites de belles rencontres 💗</h1><p>Découvrez des profils et envoyez un like.</p></div>
+<div class="filters">
+<button class="filter active" data-filter="Tous">Tous</button>
+<button class="filter" data-filter="Femmes">Femmes</button>
+<button class="filter" data-filter="Hommes">Hommes</button>
+</div>
+<p class="hint">Profils de démonstration : ils ne représentent pas encore les membres réels de la base.</p>
+<div id="profiles" class="profiles"></div>
+</section>
 
-    <section id="matchesView" class="hidden">
-      <div class="hero"><h1>♥ Mes matchs</h1><p>Les profils que vous aimez.</p></div>
-      <div id="matchProfiles" class="profiles"></div>
-    </section>
+<section id="likesView" class="hidden">
+<div class="hero"><h1>Mes likes ♥</h1><p>Les profils que vous avez aimés.</p></div>
+<div id="likeProfiles" class="profiles"></div>
+</section>
 
-    <section id="messagesView" class="hidden">
-      <div class="hero"><h1>💬 Mes messages</h1><p>Vos conversations Lovely.</p></div>
-      <p>Choisissez une conversation dans la liste à droite.</p>
-    </section>
+<section id="messagesView" class="hidden">
+<div class="hero"><h1>Mes messages 💬</h1><p>Interface de conversation Lovely.</p></div>
+<p class="hint">Les messages ici sont des exemples locaux, ils ne sont pas envoyés à d'autres utilisateurs.</p>
+<div class="chat-layout">
+<div id="chatList" class="chat-list"></div>
+<div class="chat-window">
+<div class="chat-head"><strong id="chatTitle">Choisissez une conversation</strong></div>
+<div id="chatMessages" class="chat-messages"></div>
+<form id="messageForm" class="message-form">
+<input id="messageInput" maxlength="500" placeholder="Écrivez un message..." autocomplete="off">
+<button class="primary" type="submit">➤</button>
+</form>
+</div>
+</div>
+</section>
 
-    <section id="profileView" class="hidden">
-      <div class="profile">
-        <h1>Mon profil Lovely</h1>
-        <img id="avatarPreview" class="avatar" src="https://placehold.co/240x240/fce7f3/be185d?text=Lovely" alt="Photo de profil">
-        <form id="profileForm">
-          <label for="profileName">Prénom</label>
-          <input id="profileName" maxlength="60" required>
-          <label for="profileAge">Âge (18 ans minimum)</label>
-          <input id="profileAge" type="number" min="18" max="100" required>
-          <label for="bio">À propos de moi</label>
-          <textarea id="bio" maxlength="500"></textarea>
-          <label for="avatarFile">Photo de profil</label>
-          <input id="avatarFile" type="file" accept="image/jpeg,image/png,image/webp">
-          <p style="color:#897585;font-size:12px">JPG, PNG ou WebP, 3 Mo maximum.</p>
-          <button id="saveProfile" class="primary" type="submit">Enregistrer mon profil</button>
-        </form>
-      </div>
-    </section>
-  </main>
-
-  <aside class="right">
-    <section class="panel">
-      <h3>💗 Mes matchs</h3>
-      <div id="matchStrip" class="match-list"></div>
-    </section>
-
-    <section class="panel">
-      <h3>💬 Messages</h3>
-      <div id="chatList" class="chat-list"></div>
-    </section>
-
-    <section class="panel conversation">
-      <div class="chat-head">
-        <img id="chatAvatar" src="" alt="">
-        <div><strong id="chatTitle">Conversation</strong><div style="color:#22975b;font-size:12px">Lovely</div></div>
-      </div>
-      <div id="chatMessages" class="chat-messages"></div>
-      <form id="messageForm" class="message-form">
-        <input id="messageInput" placeholder="Écrivez un message..." maxlength="500">
-        <button class="primary" type="submit">➤</button>
-      </form>
-    </section>
-  </aside>
+<section id="profileView" class="hidden">
+<div class="card">
+<div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap">
+<strong id="signedInEmail"></strong>
+<button id="profileLogout" class="secondary" type="button">Déconnexion</button>
+</div>
+<h2>Mon profil Lovely</h2>
+<p class="subtitle">Complétez votre profil.</p>
+<img id="avatarPreview" class="avatar" src="https://placehold.co/240x240/fce7f3/be185d?text=Lovely" alt="Photo de profil">
+<form id="profileForm">
+<label for="profileName">Prénom</label>
+<input id="profileName" maxlength="60" required>
+<label for="profileAge">Âge (18 ans minimum)</label>
+<input id="profileAge" type="number" min="18" max="100" required>
+<label for="bio">À propos de moi</label>
+<textarea id="bio" maxlength="500" placeholder="Parlez un peu de vous..."></textarea>
+<label for="avatarFile">Photo de profil</label>
+<input id="avatarFile" type="file" accept="image/jpeg,image/png,image/webp">
+<p class="hint">JPG, PNG ou WebP. Maximum 3 Mo.</p>
+<button id="saveProfile" class="primary full" type="submit">Enregistrer mon profil</button>
+</form>
+</div>
+</section>
+</main>
 </div>
 
 <footer>LOVELY © 2026 · Respect, sécurité et belles rencontres</footer>
@@ -232,181 +200,252 @@ main{padding:13px 10px}
 /* Configuration Supabase */
 const SUPABASE_URL = "https://tmarzbmxteddwzliluba.supabase.co";
 const SUPABASE_KEY = "sb_publishable_C6a8W0g77SAW-M9TNZLeWA_8_N71VT-";
-
 const $ = id => document.getElementById(id);
 const DEFAULT_AVATAR = "https://placehold.co/240x240/fce7f3/be185d?text=Lovely";
 
 let db = null;
+let mode = "signup";
 let currentUser = null;
 let currentAvatar = null;
-let mode = "signup";
 let filter = "Tous";
 let selectedChat = "sara";
-let likes = new Set();
-let chats = {
-  sara: [{text:"Salut ! Ça va ? 😊",mine:false}],
-  lina: [{text:"J'adore ta photo !",mine:false}],
-  imane: [{text:"On pourrait se voir un jour ?",mine:false}],
-  nour: [{text:"À bientôt ! 💕",mine:false}]
-};
+const likedIds = new Set();
 
-/* Profils de démonstration : ils ne sont pas des comptes réels. */
 const people = [
- {id:"sara",name:"Sara",age:22,city:"Casablanca",gender:"Femmes",tags:["Souriante","Voyages"],img:"https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80"},
- {id:"lina",name:"Lina",age:24,city:"Rabat",gender:"Femmes",tags:["Sport","Musique"],img:"https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=600&q=80"},
- {id:"imane",name:"Imane",age:20,city:"Marrakech",gender:"Femmes",tags:["Lecture","Cinéma"],img:"https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=600&q=80"},
- {id:"omar",name:"Omar",age:26,city:"Agadir",gender:"Hommes",tags:["Sport","Aventure"],img:"https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=600&q=80"},
- {id:"nour",name:"Nour",age:23,city:"Fès",gender:"Femmes",tags:["Art","Études"],img:"https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=600&q=80"},
- {id:"yassine",name:"Yassine",age:27,city:"Tanger",gender:"Hommes",tags:["Voyages","Football"],img:"https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=600&q=80"}
+{id:"sara",name:"Sara",age:22,city:"Casablanca",gender:"Femmes",bio:"J'aime voyager et découvrir de nouveaux endroits.",img:"https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80"},
+{id:"lina",name:"Lina",age:24,city:"Rabat",gender:"Femmes",bio:"Sport, musique et café entre amis.",img:"https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=600&q=80"},
+{id:"imane",name:"Imane",age:20,city:"Marrakech",gender:"Femmes",bio:"Lecture, cinéma et belles discussions.",img:"https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=600&q=80"},
+{id:"omar",name:"Omar",age:26,city:"Agadir",gender:"Hommes",bio:"Sport et aventure.",img:"https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=600&q=80"},
+{id:"nour",name:"Nour",age:23,city:"Fès",gender:"Femmes",bio:"Art, études et voyages.",img:"https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=600&q=80"},
+{id:"yassine",name:"Yassine",age:27,city:"Tanger",gender:"Hommes",bio:"Voyages et football.",img:"https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=600&q=80"}
 ];
 
-function notice(message,error=false){
-  $("notice").textContent=message;
-  $("notice").classList.remove("hidden");
-  $("notice").classList.toggle("error",error);
+const chats = {
+sara:[{text:"Salut ! Ça va ? 😊",mine:false}],
+lina:[{text:"Ravie de faire ta connaissance !",mine:false}],
+imane:[{text:"Tu aimes le cinéma ?",mine:false}]
+};
+
+function notice(message,type="success"){
+const n=$("notice");
+n.textContent=message;
+n.className=type;
 }
-function clearNotice(){$("notice").classList.add("hidden")}
-function safeText(s){
-  return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+function clearNotice(){
+$("notice").className="hidden";
+$("notice").textContent="";
+}
+function esc(s){
+return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 }
 function friendlyError(e){
-  const m=e?.message||"Une erreur est survenue.";
-  if(/invalid login credentials/i.test(m))return"E-mail ou mot de passe incorrect.";
-  if(/email not confirmed/i.test(m))return"Confirmez votre adresse e-mail avant de vous connecter.";
-  if(/user already registered/i.test(m))return"Cette adresse existe déjà. Connectez-vous.";
-  if(/row-level security|permission denied/i.test(m))return"Accès refusé. Vérifiez les politiques RLS de Supabase.";
-  if(/failed to fetch|networkerror/i.test(m))return"Connexion impossible. Vérifiez Internet et Supabase.";
-  return m;
+const m=e?.message||"Une erreur est survenue.";
+if(/invalid login credentials/i.test(m))return"E-mail ou mot de passe incorrect.";
+if(/email not confirmed/i.test(m))return"Confirmez votre adresse e-mail avant de vous connecter.";
+if(/user already registered/i.test(m))return"Cette adresse e-mail existe déjà. Connectez-vous.";
+if(/row-level security|permission denied/i.test(m))return"Accès refusé. Vérifiez les politiques RLS.";
+if(/bucket not found/i.test(m))return"Créez le bucket avatars dans Supabase Storage.";
+if(/column .* does not exist|could not find the .* column/i.test(m))return"Une colonne manque dans la table profiles.";
+if(/failed to fetch|networkerror|load failed/i.test(m))return"Connexion impossible. Vérifiez Internet et Supabase.";
+return m;
 }
 
-try {
-  if(!window.supabase) throw Error("La bibliothèque Supabase n'a pas été chargée.");
-  db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
-} catch(e){notice(friendlyError(e),true)}
+try{
+if(!window.supabase)throw new Error("La bibliothèque Supabase ne s'est pas chargée.");
+db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+}catch(e){notice(friendlyError(e),"error");}
 
 function setMode(next){
-  mode=next;
-  const signup=mode==="signup";
-  $("authTitle").textContent=signup?"Créer un compte":"Connexion";
-  $("authSubtitle").textContent=signup?"Rejoignez Lovely et créez votre profil.":"Connectez-vous pour retrouver votre profil.";
-  $("signupFields").classList.toggle("hidden",!signup);
-  $("name").required=signup;
-  $("age").required=signup;
-  $("password").autocomplete=signup?"new-password":"current-password";
-  $("authSubmit").textContent=signup?"Créer mon compte":"Se connecter";
-  $("switchText").textContent=signup?"Vous avez déjà un compte ?":"Vous n'avez pas de compte ?";
-  $("switchMode").textContent=signup?"Se connecter":"Créer un compte";
+mode=next;
+const signup=mode==="signup";
+$("authTitle").textContent=signup?"Créer un compte":"Connexion";
+$("authSubtitle").textContent=signup?"Rejoignez Lovely et créez votre profil.":"Connectez-vous pour retrouver votre profil.";
+$("signupFields").classList.toggle("hidden",!signup);
+$("name").required=signup;
+$("age").required=signup;
+$("password").autocomplete=signup?"new-password":"current-password";
+$("authSubmit").textContent=signup?"Créer mon compte":"Se connecter";
+$("switchText").textContent=signup?"Vous avez déjà un compte ?":"Vous n'avez pas de compte ?";
+$("switchMode").textContent=signup?"Se connecter":"Créer un compte";
 }
 $("switchMode").addEventListener("click",()=>setMode(mode==="signup"?"login":"signup"));
 
 function showView(view){
-  ["discover","matches","messages","profile"].forEach(v=>$(v+"View").classList.toggle("hidden",v!==view));
-  document.querySelectorAll(".navbtn").forEach(b=>b.classList.toggle("active",b.dataset.view===view));
-  if(view==="matches")renderMatches();
-  if(view==="profile"&&currentUser)loadProfile(currentUser).catch(e=>notice(friendlyError(e),true));
+["discover","likes","messages","profile"].forEach(v=>$(v+"View").classList.toggle("hidden",v!==view));
+document.querySelectorAll(".navbtn").forEach(b=>b.classList.toggle("active",b.dataset.view===view));
+if(view==="likes")renderLikes();
+if(view==="messages")renderChats();
 }
 document.querySelectorAll(".navbtn").forEach(b=>b.addEventListener("click",()=>showView(b.dataset.view)));
 
-function card(p){
-  return `<article class="person">
-    <img src="${p.img}" alt="Photo de ${safeText(p.name)}" loading="lazy">
-    <div class="person-info">
-      <h3>${safeText(p.name)}</h3>
-      <div class="meta">♙ ${p.age} ans</div>
-      <div class="meta">⌖ ${safeText(p.city)}</div>
-      <div class="tags">${p.tags.map(t=>`<span class="tag">${safeText(t)}</span>`).join("")}</div>
-      <div class="actions">
-        <button class="round" data-pass="${p.id}" aria-label="Passer">×</button>
-        <button class="round like" data-like="${p.id}" aria-label="Aimer">♥</button>
-      </div>
-    </div>
-  </article>`;
+function personCard(p){
+return `<article class="person">
+<img src="${p.img}" alt="Photo de ${esc(p.name)}" loading="lazy">
+<div class="person-info">
+<h3>${esc(p.name)}, ${p.age}</h3>
+<div class="meta">⌖ ${esc(p.city)}</div>
+<p class="meta">${esc(p.bio)}</p>
+<div class="actions">
+<button class="round" data-pass="${p.id}" aria-label="Passer">×</button>
+<button class="round like ${likedIds.has(p.id)?"liked":""}" data-like="${p.id}" aria-label="Aimer">${likedIds.has(p.id)?"♥":"♡"}</button>
+</div></div></article>`;
 }
-function attachCardActions(root){
-  root.querySelectorAll("[data-like]").forEach(b=>b.addEventListener("click",()=>toggleLike(b.dataset.like)));
-  root.querySelectorAll("[data-pass]").forEach(b=>b.addEventListener("click",()=>b.closest(".person").remove()));
+function bindCards(root){
+root.querySelectorAll("[data-like]").forEach(b=>b.addEventListener("click",()=>toggleLike(b.dataset.like)));
+root.querySelectorAll("[data-pass]").forEach(b=>b.addEventListener("click",()=>b.closest(".person").remove()));
 }
 function renderPeople(){
-  const list=people.filter(p=>filter==="Tous"||p.gender===filter);
-  $("profiles").innerHTML=list.map(card).join("");
-  attachCardActions($("profiles"));
+const list=people.filter(p=>filter==="Tous"||p.gender===filter);
+$("profiles").innerHTML=list.map(personCard).join("");
+bindCards($("profiles"));
 }
 function toggleLike(id){
-  if(likes.has(id))likes.delete(id);else likes.add(id);
-  renderPeople();renderMatches();renderMatchStrip();
-  notice(likes.has(id)?"❤️ Profil ajouté à vos likes (démo locale).":"Like retiré (démo locale).");
+if(likedIds.has(id))likedIds.delete(id);else likedIds.add(id);
+renderPeople();
+renderLikes();
+notice(likedIds.has(id)?"Profil ajouté à vos likes sur cet appareil.":"Like retiré.","info");
 }
-function renderMatches(){
-  const list=people.filter(p=>likes.has(p.id));
-  $("matchProfiles").innerHTML=list.length?list.map(card).join():'<p>Aucun like pour le moment. Découvrez des profils et cliquez sur ♥.</p>';
-  attachCardActions($("matchProfiles"));
+function renderLikes(){
+const list=people.filter(p=>likedIds.has(p.id));
+$("likeProfiles").innerHTML=list.length?list.map(personCard).join():"<p>Vous n'avez pas encore aimé de profil.</p>";
+bindCards($("likeProfiles"));
 }
-function renderMatchStrip(){
-  const list=people.filter(p=>likes.has(p.id));
-  $("matchStrip").innerHTML=list.length?list.map(p=>`<div class="match" data-chat="${p.id}"><img src="${p.img}" alt=""><p>${safeText(p.name)}</p></div>`).join(""):'<p style="font-size:12px;color:#897585">Vos likes apparaîtront ici.</p>';
-  $("matchStrip").querySelectorAll("[data-chat]").forEach(b=>b.addEventListener("click",()=>selectChat(b.dataset.chat)));
-}
-function renderChatList(){
-  $("chatList").innerHTML=people.filter(p=>chats[p.id]).map(p=>`<div class="chat-user" data-chat="${p.id}"><img src="${p.img}" alt=""><div><strong>${safeText(p.name)}</strong><p>${safeText(chats[p.id].slice(-1)[0]?.text||"Nouvelle conversation")}</p></div></div>`).join("");
-  $("chatList").querySelectorAll("[data-chat]").forEach(b=>b.addEventListener("click",()=>selectChat(b.dataset.chat)));
-}
-function selectChat(id){
-  const p=people.find(x=>x.id===id);
-  if(!p)return;
-  selectedChat=id;
-  if(!chats[id])chats[id]=[];
-  $("chatAvatar").src=p.img;
-  $("chatTitle").textContent=p.name;
-  renderMessages();renderChatList();
-}
-function renderMessages(){
-  $("chatMessages").innerHTML=(chats[selectedChat]||[]).map(m=>`<div class="bubble ${m.mine?"mine":""}">${safeText(m.text)}</div>`).join("");
-  $("chatMessages").scrollTop=$("chatMessages").scrollHeight;
-}
-$("messageForm").addEventListener("submit",e=>{
-  e.preventDefault();
-  const text=$("messageInput").value.trim();
-  if(!text)return;
-  chats[selectedChat]=chats[selectedChat]||[];
-  chats[selectedChat].push({text,mine:true});
-  $("messageInput").value="";
-  renderMessages();renderChatList();
-  notice("Message ajouté à la démonstration locale. Il n'est pas encore envoyé à un autre utilisateur.");
-});
 document.querySelectorAll("[data-filter]").forEach(b=>b.addEventListener("click",()=>{
-  filter=b.dataset.filter;
-  document.querySelectorAll("[data-filter]").forEach(x=>x.classList.toggle("active",x===b));
-  renderPeople();
+filter=b.dataset.filter;
+document.querySelectorAll("[data-filter]").forEach(x=>x.classList.toggle("active",x===b));
+renderPeople();
 }));
 
+function renderChats(){
+$("chatList").innerHTML=Object.keys(chats).map(id=>{
+const p=people.find(x=>x.id===id);
+return `<div class="chat-user ${id===selectedChat?"active":""}" data-chat="${id}">${esc(p.name)}<br><small>${esc(chats[id].slice(-1)[0]?.text||"Conversation")}</small></div>`;
+}).join("");
+$("chatList").querySelectorAll("[data-chat]").forEach(b=>b.addEventListener("click",()=>selectChat(b.dataset.chat)));
+renderMessages();
+}
+function selectChat(id){
+selectedChat=id;
+$("chatTitle").textContent=people.find(p=>p.id===id)?.name||"Conversation";
+renderChats();
+}
+function renderMessages(){
+$("chatMessages").innerHTML=(chats[selectedChat]||[]).map(m=>`<div class="bubble ${m.mine?"mine":""}">${esc(m.text)}</div>`).join("");
+$("chatMessages").scrollTop=$("chatMessages").scrollHeight;
+}
+$("messageForm").addEventListener("submit",e=>{
+e.preventDefault();
+const text=$("messageInput").value.trim();
+if(!text)return;
+chats[selectedChat].push({text,mine:true});
+$("messageInput").value="";
+renderChats();
+notice("Message de démonstration ajouté. Il n'est pas encore envoyé à un autre membre.","info");
+});
+
 async function loadProfile(user){
-  const {data,error}=await db.from("profiles")
-    .select("id,name,age,bio,avatar_url").eq("id",user.id).maybeSingle();
-  if(error)throw error;
-  const p=data||{};
-  $("profileName").value=p.name||user.user_metadata?.name||"";
-  $("profileAge").value=p.age||user.user_metadata?.age||"";
-  $("bio").value=p.bio||"";
-  currentAvatar=p.avatar_url||null;
-  $("avatarPreview").src=currentAvatar||DEFAULT_AVATAR;
-  $("headerAvatar").src=currentAvatar||DEFAULT_AVATAR;
-  $("headerName").textContent=p.name||user.email||"Lovely";
+const {data,error}=await db.from("profiles")
+.select("id,name,age,bio,avatar_url").eq("id",user.id).maybeSingle();
+if(error)throw error;
+let p=data;
+if(!p){
+const md=user.user_metadata||{};
+const {data:created,error:ce}=await db.from("profiles").upsert({
+id:user.id,name:md.name||"",age:Number(md.age)||18,bio:"",avatar_url:null
+},{onConflict:"id"}).select("id,name,age,bio,avatar_url").single();
+if(ce)throw ce;
+p=created;
 }
+$("profileName").value=p.name||user.user_metadata?.name||"";
+$("profileAge").value=p.age||user.user_metadata?.age||"";
+$("bio").value=p.bio||"";
+currentAvatar=p.avatar_url||null;
+$("avatarPreview").src=currentAvatar||DEFAULT_AVATAR;
+$("headerAvatar").src=currentAvatar||DEFAULT_AVATAR;
+$("headerName").textContent=p.name||user.email||"Lovely";
+$("signedInEmail").textContent=user.email||"";
+}
+
 async function renderSession(user){
-  currentUser=user||null;
-  $("authArea").classList.toggle("hidden",!!user);
-  $("app").classList.toggle("hidden",!user);
-  $("logout").classList.toggle("hidden",!user);
-  if(user){
-    try{
-      await loadProfile(user);
-      showView("discover");
-      renderPeople();renderMatchStrip();renderChatList();
-    }catch(e){notice(friendlyError(e),true)}
-  }
+currentUser=user||null;
+$("authCard").classList.toggle("hidden",!!user);
+$("app").classList.toggle("hidden",!user);
+$("logout").classList.toggle("hidden",!user);
+if(user){
+try{
+await loadProfile(user);
+showView("discover");
+renderPeople();
+}catch(e){
+notice("Connexion réussie, mais le profil n'a pas pu être chargé : "+friendlyError(e),"error");
+showView("profile");
 }
+}
+}
+
 $("authForm").addEventListener("submit",async e=>{
-  e.preventDefault();clearNotice();
-  if(!db)return notice("Supabase n'est pas initialisé.",true);
-  const btn=$("authSubmit");
-  
+e.preventDefault();
+clearNotice();
+if(!db)return notice("Supabase n'est pas initialisé. Vérifiez l'URL et la clé publique.","error");
+const btn=$("authSubmit");
+btn.disabled=true;
+try{
+if(mode==="signup"){
+const name=$("name").value.trim(),age=Number($("age").value);
+if(!name||!Number.isInteger(age)||age<18||age>100)throw Error("Entrez un prénom et un âge entre 18 et 100 ans.");
+const {data,error}=await db.auth.signUp({
+email:$("email").value.trim(),
+password:$("password").value,
+options:{data:{name,age}}
+});
+if(error)throw error;
+if(data.session){
+await renderSession(data.user);
+notice("Compte créé. Bienvenue sur Lovely !");
+}else{
+setMode("login");
+notice("Compte créé ! Vérifiez votre e-mail puis connectez-vous.");
+}
+}else{
+const {data,error}=await db.auth.signInWithPassword({
+email:$("email").value.trim(),password:$("password").value
+});
+if(error)throw error;
+await renderSession(data.user);
+clearNotice();
+}
+}catch(e){notice(friendlyError(e),"error");}
+finally{
+btn.disabled=false;
+btn.textContent=mode==="signup"?"Créer mon compte":"Se connecter";
+}
+});
+
+$("forgot").addEventListener("click",async()=>{
+if(!db)return notice("Supabase n'est pas disponible.","error");
+const email=$("email").value.trim();
+if(!email)return notice("Entrez votre adresse e-mail d'abord.","info");
+try{
+const {error}=await db.auth.resetPasswordForEmail(email,{redirectTo:location.origin+location.pathname});
+if(error)throw error;
+notice("Si cette adresse est enregistrée, un e-mail de réinitialisation sera envoyé.");
+}catch(e){notice(friendlyError(e),"error");}
+});
+
+$("avatarFile").addEventListener("change",()=>{
+const f=$("avatarFile").files?.[0];
+if(!f)return;
+if(!["image/jpeg","image/png","image/webp"].includes(f.type)||f.size>3*1024*1024){
+$("avatarFile").value="";
+return notice("Choisissez une image JPG, PNG ou WebP de moins de 3 Mo.","error");
+}
+$("avatarPreview").src=URL.createObjectURL(f);
+});
+
+$("profileForm").addEventListener("submit",async e=>{
+e.preventDefault();
+if(!db||!currentUser)return notice("Connectez-vous d'abord.","error");
+const name=$("profileName").value.trim();
+const age=Number($("profileAge").value);
+const bio=$("bio").value.trim();
+co
