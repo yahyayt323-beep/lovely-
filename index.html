@@ -4,17 +4,20 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#ec4899">
+  <meta name="theme-color" content="#e52e83">
   <title>LOVELY - Rencontres</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
     :root {
-      --pink: #ec4899;
-      --dark: #db2777;
-      --text: #352432;
-      --muted: #806b79;
-      --border: #f3dce8;
+      --pink: #e52e83;
+      --pink-dark: #c51d6c;
+      --light: #fff1f7;
+      --text: #332432;
+      --muted: #857281;
+      --border: #f1dce7;
+      --white: #fff;
+      --green: #16834a;
     }
 
     * { box-sizing: border-box; }
@@ -22,94 +25,108 @@
     body {
       margin: 0;
       font-family: Arial, sans-serif;
+      background: linear-gradient(145deg, #fff7fb, #ffe4ef);
       color: var(--text);
-      background: linear-gradient(135deg, #fff5f9, #ffe4ef);
       min-height: 100vh;
     }
 
     header {
-      background: white;
-      border-bottom: 1px solid var(--border);
-      padding: 18px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      position: sticky;
-      top: 0;
-      z-index: 5;
+      padding: 15px 18px;
+      background: #fff;
+      border-bottom: 1px solid var(--border);
     }
 
-    .logo { font-size: 27px; font-weight: 900; color: var(--dark); }
-    .tagline { color: var(--muted); font-size: 12px; margin-top: 4px; }
-    main { width: min(100% - 26px, 540px); margin: 25px auto; }
+    .logo {
+      color: var(--pink);
+      font-size: 28px;
+      font-weight: 900;
+    }
+
+    .tagline { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+    main {
+      width: min(100% - 24px, 780px);
+      margin: 20px auto 40px;
+    }
 
     .card {
-      background: white;
+      background: var(--white);
       border: 1px solid var(--border);
       border-radius: 20px;
-      padding: 23px;
-      margin-bottom: 18px;
-      box-shadow: 0 10px 35px #b82b6810;
+      padding: 20px;
+      margin-bottom: 16px;
+      box-shadow: 0 8px 30px #9e285a0b;
     }
 
-    h1, h2 { text-align: center; margin-top: 0; }
+    h1, h2, h3 { margin-top: 0; }
+    h1, h2 { text-align: center; }
     h1 { font-size: 25px; }
     h2 { font-size: 21px; }
+    p { line-height: 1.55; }
 
-    .subtitle {
-      text-align: center;
-      color: var(--muted);
-      line-height: 1.6;
-      font-size: 14px;
-    }
+    .muted { color: var(--muted); }
+    .center { text-align: center; }
+    .hidden { display: none !important; }
 
     label {
       display: block;
+      margin: 13px 0 6px;
       font-size: 14px;
       font-weight: 700;
-      margin: 15px 0 7px;
     }
 
-    input, textarea {
-      display: block;
+    input, textarea, select {
       width: 100%;
-      padding: 13px;
-      font: inherit;
-      color: var(--text);
-      background: #fffafd;
+      padding: 12px;
       border: 1px solid var(--border);
       border-radius: 11px;
+      background: #fffafd;
+      font: inherit;
+      color: var(--text);
       outline: none;
     }
 
-    input:focus, textarea:focus {
+    input:focus, textarea:focus, select:focus {
       border-color: var(--pink);
-      box-shadow: 0 0 0 3px #ec489918;
+      box-shadow: 0 0 0 3px #e52e8315;
     }
 
-    textarea { min-height: 100px; resize: vertical; }
+    textarea { min-height: 90px; resize: vertical; }
 
     button {
       border: 0;
       border-radius: 11px;
-      padding: 12px 15px;
-      font-size: 14px;
+      padding: 11px 14px;
+      font: inherit;
       font-weight: 700;
       cursor: pointer;
     }
 
-    button:disabled { opacity: .6; cursor: wait; }
+    button:disabled { opacity: .55; cursor: wait; }
 
     .primary {
-      display: block;
-      width: 100%;
-      margin-top: 18px;
       background: var(--pink);
       color: white;
     }
 
-    .primary:hover { background: var(--dark); }
-    .secondary { background: #fff0f6; color: var(--dark); }
+    .primary:hover { background: var(--pink-dark); }
+    .full { width: 100%; margin-top: 16px; }
+
+    .secondary {
+      background: var(--light);
+      color: var(--pink-dark);
+    }
+
+    .danger {
+      background: #fff0f0;
+      color: #b42335;
+    }
 
     .switch {
       text-align: center;
@@ -119,21 +136,19 @@
     }
 
     .switch button {
+      padding: 4px;
       background: transparent;
-      color: var(--dark);
-      padding: 5px;
+      color: var(--pink-dark);
     }
-
-    .hidden { display: none !important; }
 
     #notice {
       display: none;
       padding: 13px;
-      border-radius: 11px;
-      margin-bottom: 16px;
-      font-size: 14px;
-      line-height: 1.6;
+      border-radius: 12px;
+      margin-bottom: 15px;
       overflow-wrap: anywhere;
+      line-height: 1.5;
+      font-size: 14px;
     }
 
     #notice.show { display: block; }
@@ -141,29 +156,139 @@
     #notice.error { background: #fff0f0; color: #a21b32; }
     #notice.info { background: #eff6ff; color: #1d4e89; }
 
-    .avatar {
-      display: block;
-      width: 115px;
-      height: 115px;
-      border-radius: 50%;
-      object-fit: cover;
-      margin: 15px auto;
-      border: 4px solid #ffe0ed;
-      background: #fff0f6;
+    .nav {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 4px 0 14px;
+      margin-bottom: 4px;
     }
+
+    .nav button { white-space: nowrap; }
+    .nav button.active { background: var(--pink); color: white; }
 
     .account-bar {
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      justify-content: space-between;
       gap: 10px;
       flex-wrap: wrap;
-      margin-bottom: 20px;
     }
 
-    #signedInEmail { overflow-wrap: anywhere; }
+    .account-bar strong { overflow-wrap: anywhere; }
+
+    .avatar {
+      width: 100%;
+      height: 270px;
+      object-fit: cover;
+      display: block;
+      background: var(--light);
+      border-radius: 15px;
+    }
+
+    .avatar-small {
+      width: 85px;
+      height: 85px;
+      border-radius: 50%;
+      object-fit: cover;
+      background: var(--light);
+      flex-shrink: 0;
+    }
+
+    .my-avatar {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+      display: block;
+      margin: 12px auto;
+      border: 4px solid #ffe0ed;
+      background: var(--light);
+    }
+
+    .people-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+    }
+
+    .person-card {
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 12px;
+      min-width: 0;
+      background: white;
+    }
+
+    .person-card h3 { margin: 10px 0 5px; }
+    .person-card p { margin: 7px 0; overflow-wrap: anywhere; }
+
+    .row-buttons { display: flex; gap: 8px; margin-top: 12px; }
+    .row-buttons button { flex: 1; }
+
+    .list-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .list-item:last-child { border-bottom: 0; }
+    .list-info { flex: 1; min-width: 0; }
+    .list-info strong, .list-info small { display: block; overflow-wrap: anywhere; }
+    .list-info small { margin-top: 5px; color: var(--muted); }
+
+    .chat-box {
+      height: 300px;
+      overflow-y: auto;
+      background: #fff8fb;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 12px;
+      margin: 14px 0;
+    }
+
+    .bubble {
+      max-width: 85%;
+      padding: 10px 12px;
+      margin: 8px 0;
+      border-radius: 14px;
+      background: #f5e8ef;
+      overflow-wrap: anywhere;
+      white-space: pre-wrap;
+    }
+
+    .bubble.mine {
+      margin-left: auto;
+      color: white;
+      background: var(--pink);
+    }
+
+    .bubble small {
+      display: block;
+      font-size: 10px;
+      margin-top: 5px;
+      opacity: .8;
+    }
+
+    .chat-compose {
+      display: flex;
+      gap: 8px;
+      align-items: flex-end;
+    }
+
+    .chat-compose textarea { min-height: 46px; max-height: 120px; }
+    .chat-compose button { min-height: 46px; }
+
     .hint { font-size: 12px; color: var(--muted); line-height: 1.5; }
-    footer { padding: 22px; text-align: center; color: var(--muted); font-size: 12px; }
+    footer { text-align: center; padding: 22px; color: var(--muted); font-size: 12px; }
+
+    @media (max-width: 430px) {
+      .card { padding: 16px; }
+      .avatar { height: 230px; }
+      .people-grid { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 
@@ -179,33 +304,30 @@
   <main>
     <div id="notice" role="status" aria-live="polite"></div>
 
+    <!-- Authentification -->
     <section id="authCard" class="card">
       <h1 id="authTitle">Créer un compte</h1>
-      <p id="authSubtitle" class="subtitle">
-        Rejoignez Lovely et créez votre profil.
+      <p id="authSubtitle" class="muted center">
+        Rejoignez Lovely et faites de belles rencontres.
       </p>
 
       <form id="authForm">
         <div id="signupFields">
           <label for="name">Prénom</label>
-          <input id="name" type="text" maxlength="60"
-                 autocomplete="given-name" required>
+          <input id="name" type="text" maxlength="60" required>
 
           <label for="age">Âge (18 ans minimum)</label>
-          <input id="age" type="number" min="18" max="100"
-                 inputmode="numeric" required>
+          <input id="age" type="number" min="18" max="100" required>
         </div>
 
         <label for="email">Adresse e-mail</label>
-        <input id="email" type="email" autocomplete="email"
-               placeholder="vous@exemple.com" required>
+        <input id="email" type="email" autocomplete="email" required>
 
         <label for="password">Mot de passe</label>
         <input id="password" type="password" minlength="6"
-               autocomplete="new-password"
-               placeholder="6 caractères minimum" required>
+               autocomplete="new-password" required>
 
-        <button id="authSubmit" class="primary" type="submit">
+        <button id="authSubmit" class="primary full" type="submit">
           Créer mon compte
         </button>
       </form>
@@ -216,134 +338,240 @@
       </div>
     </section>
 
-    <section id="profileCard" class="card hidden">
-      <div class="account-bar">
-        <strong id="signedInEmail"></strong>
-        <button id="logoutButton" class="secondary" type="button">
-          Déconnexion
-        </button>
+    <!-- Application -->
+    <section id="app" class="hidden">
+      <div class="card">
+        <div class="account-bar">
+          <div>
+            <strong id="signedInEmail"></strong>
+            <div class="hint">Bienvenue sur Lovely ❤️</div>
+          </div>
+          <button id="logoutButton" class="secondary" type="button">
+            Déconnexion
+          </button>
+        </div>
       </div>
 
-      <h2>Mon profil Lovely</h2>
-      <p class="subtitle">Complétez votre profil.</p>
+      <nav class="nav" aria-label="Navigation principale">
+        <button class="secondary active" data-page="discover" type="button">💗 Découvrir</button>
+        <button class="secondary" data-page="likes" type="button">❤️ Mes likes</button>
+        <button class="secondary" data-page="matches" type="button">💞 Matchs</button>
+        <button class="secondary" data-page="messages" type="button">💬 Messages</button>
+        <button class="secondary" data-page="profile" type="button">👤 Mon profil</button>
+      </nav>
 
-      <img id="avatarPreview" class="avatar"
-           alt="Photo de profil"
-           src="https://placehold.co/220x220/fce7f3/be185d?text=Lovely">
+      <!-- Découvrir -->
+      <section id="page-discover" class="page">
+        <div class="card">
+          <h2>Découvrir des personnes</h2>
+          <p class="muted center">Peut-être votre prochaine belle rencontre 💕</p>
 
-      <form id="profileForm">
-        <label for="profileName">Prénom</label>
-        <input id="profileName" type="text" maxlength="60" required>
+          <label for="searchName">Rechercher par prénom</label>
+          <input id="searchName" type="search" placeholder="Ex. Sara">
 
-        <label for="profileAge">Âge</label>
-        <input id="profileAge" type="number" min="18" max="100" required>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+            <div>
+              <label for="minAge">Âge minimum</label>
+              <input id="minAge" type="number" min="18" max="100" placeholder="18">
+            </div>
+            <div>
+              <label for="maxAge">Âge maximum</label>
+              <input id="maxAge" type="number" min="18" max="100" placeholder="100">
+            </div>
+          </div>
 
-        <label for="bio">À propos de moi</label>
-        <textarea id="bio" maxlength="500"
-                  placeholder="Parlez un peu de vous..."></textarea>
+          <button id="searchButton" class="primary full" type="button">
+            Rechercher
+          </button>
+          <button id="refreshButton" class="secondary full" type="button">
+            Actualiser les profils
+          </button>
+        </div>
 
-        <label for="avatarFile">Photo de profil</label>
-        <input id="avatarFile" type="file"
-               accept="image/jpeg,image/png,image/webp">
-        <p class="hint">JPG, PNG ou WebP. Taille maximale : 3 Mo.</p>
+        <div id="discoverResults" class="people-grid"></div>
+      </section>
 
-        <button id="saveProfileButton" class="primary" type="submit">
-          Enregistrer mon profil
-        </button>
-      </form>
+      <!-- Likes -->
+      <section id="page-likes" class="page hidden">
+        <div class="card">
+          <h2>❤️ Mes likes</h2>
+          <p class="muted center">Les personnes que vous avez aimées.</p>
+          <div id="likesList"></div>
+        </div>
+      </section>
+
+      <!-- Matchs -->
+      <section id="page-matches" class="page hidden">
+        <div class="card">
+          <h2>💞 Mes matchs</h2>
+          <p class="muted center">Les likes mutuels apparaissent ici.</p>
+          <div id="matchesList"></div>
+        </div>
+      </section>
+
+      <!-- Messages -->
+      <section id="page-messages" class="page hidden">
+        <div class="card">
+          <h2>💬 Messages</h2>
+          <p class="muted">
+            Choisissez un match pour ouvrir la conversation.
+          </p>
+          <div id="messageContacts"></div>
+          <div id="chatArea" class="hidden">
+            <h3 id="chatTitle"></h3>
+            <div id="chatBox" class="chat-box"></div>
+            <form id="chatForm" class="chat-compose">
+              <textarea id="chatInput" maxlength="2000"
+                        placeholder="Écrivez un message..." required></textarea>
+              <button class="primary" type="submit">Envoyer</button>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <!-- Mon profil -->
+      <section id="page-profile" class="page hidden">
+        <div class="card">
+          <h2>Mon profil Lovely</h2>
+          <img id="avatarPreview" class="my-avatar"
+               src="https://placehold.co/240x240/fce7f3/be185d?text=Lovely"
+               alt="Photo de profil">
+
+          <form id="profileForm">
+            <label for="profileName">Prénom</label>
+            <input id="profileName" type="text" maxlength="60" required>
+
+            <label for="profileAge">Âge</label>
+            <input id="profileAge" type="number" min="18" max="100" required>
+
+            <label for="bio">À propos de moi</label>
+            <textarea id="bio" maxlength="500"
+                      placeholder="Parlez un peu de vous..."></textarea>
+
+            <label for="avatarFile">Photo de profil</label>
+            <input id="avatarFile" type="file"
+                   accept="image/jpeg,image/png,image/webp">
+            <p class="hint">JPG, PNG ou WebP. Taille maximale : 3 Mo.</p>
+
+            <button id="saveProfileButton" class="primary full" type="submit">
+              Enregistrer mon profil
+            </button>
+          </form>
+        </div>
+      </section>
     </section>
   </main>
 
-  <footer>LOVELY © 2026 · Rencontres respectueuses</footer>
+  <footer>LOVELY © 2026 · Respect, sécurité et belles rencontres</footer>
 
   <script>
     "use strict";
 
-    // CONFIGURATION SUPABASE
-    const SUPABASE_URL =
-      "https://tmarzbmxteddwzliluba.supabase.co";
-
+    // --------------------------------------------------
+    // 1. CONFIGURATION SUPABASE
+    // --------------------------------------------------
+    const SUPABASE_URL = "https://tmarzbmxteddwzliluba.supabase.co";
     const SUPABASE_PUBLISHABLE_KEY =
       "sb_publishable_C6a8W0g77SAW-M9TNZLeWA_8_N71VT-";
-
-    const $ = id => document.getElementById(id);
-
-    if (!window.supabase) {
-      $("notice").textContent =
-        "La bibliothèque Supabase n'a pas chargé. Vérifiez votre connexion Internet.";
-      $("notice").className = "show error";
-      throw new Error("Supabase JS non chargé");
-    }
 
     const db = window.supabase.createClient(
       SUPABASE_URL,
       SUPABASE_PUBLISHABLE_KEY
     );
 
+    const $ = id => document.getElementById(id);
+    const PLACEHOLDER =
+      "https://placehold.co/400x400/fce7f3/be185d?text=Lovely";
+
     let mode = "signup";
     let currentUser = null;
-    let currentAvatarUrl = null;
-    let previewObjectUrl = null;
+    let currentProfile = null;
+    let allProfiles = [];
+    let myLikes = [];
+    let myMatches = [];
+    let activeConversationId = null;
+    let activeChatUser = null;
+    let chatRefreshInterval = null;
+    let avatarPreviewUrl = null;
 
-    function message(text, type = "info") {
+    // --------------------------------------------------
+    // 2. MESSAGES ET ERREURS
+    // --------------------------------------------------
+    function notify(text, type = "info") {
       $("notice").textContent = text;
       $("notice").className = "show " + type;
+      $("notice").scrollIntoView({ behavior: "smooth", block: "nearest" });
     }
 
-    function clearMessage() {
+    function clearNotice() {
       $("notice").textContent = "";
       $("notice").className = "";
     }
 
-    function friendlyError(error) {
-      const m = error?.message || "Une erreur inconnue est survenue.";
+    function errorText(error) {
+      const text = error?.message || "Une erreur est survenue.";
 
-      if (/invalid login credentials/i.test(m))
-        return "Adresse e-mail ou mot de passe incorrect.";
+      if (/invalid login credentials/i.test(text))
+        return "E-mail ou mot de passe incorrect.";
 
-      if (/email not confirmed/i.test(m))
-        return "Veuillez confirmer votre adresse e-mail avant de vous connecter.";
+      if (/email not confirmed/i.test(text))
+        return "Confirmez votre adresse e-mail avant de vous connecter.";
 
-      if (/user already registered/i.test(m))
-        return "Cette adresse e-mail possède déjà un compte. Connectez-vous.";
+      if (/user already registered/i.test(text))
+        return "Cette adresse e-mail possède déjà un compte.";
 
-      if (/row-level security|permission denied/i.test(m))
-        return "Accès refusé. Vérifiez les politiques RLS de Supabase.";
+      if (/row-level security|permission denied/i.test(text))
+        return "Accès refusé par RLS. Vérifiez les politiques de sécurité Supabase.";
 
-      if (/bucket not found/i.test(m))
+      if (/could not find the .* column/i.test(text))
+        return "Une colonne manque dans la base de données. Vérifiez le schéma SQL.";
+
+      if (/bucket not found/i.test(text))
         return "Le bucket Storage « avatars » n'existe pas.";
 
-      return m;
+      return text;
     }
 
-    function setBusy(button, busy, text) {
-      if (busy) {
-        button.dataset.oldText = button.textContent;
+    function busy(button, value, busyText) {
+      if (value) {
+        button.dataset.originalText = button.textContent;
         button.disabled = true;
-        button.textContent = text;
+        button.textContent = busyText;
       } else {
         button.disabled = false;
-        button.textContent = button.dataset.oldText || text;
+        button.textContent =
+          button.dataset.originalText || button.textContent;
       }
     }
 
-    function setMode(next) {
-      mode = next;
+    function escapeHTML(value) {
+      return String(value ?? "").replace(/[&<>"']/g, char => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+      })[char]);
+    }
+
+    // --------------------------------------------------
+    // 3. AUTHENTIFICATION
+    // --------------------------------------------------
+    function setAuthMode(nextMode) {
+      mode = nextMode;
       const signup = mode === "signup";
 
       $("authTitle").textContent =
         signup ? "Créer un compte" : "Connexion";
 
       $("authSubtitle").textContent = signup
-        ? "Rejoignez Lovely et créez votre profil."
+        ? "Rejoignez Lovely et faites de belles rencontres."
         : "Connectez-vous pour retrouver votre profil.";
 
       $("signupFields").classList.toggle("hidden", !signup);
       $("name").required = signup;
       $("age").required = signup;
-
-      $("password").autocomplete =
-        signup ? "new-password" : "current-password";
+      $("password").autocomplete = signup ? "new-password" : "current-password";
 
       $("authSubmit").textContent =
         signup ? "Créer mon compte" : "Se connecter";
@@ -355,14 +583,13 @@
       $("switchMode").textContent =
         signup ? "Se connecter" : "Créer un compte";
 
-      clearMessage();
+      clearNotice();
     }
 
     $("switchMode").addEventListener("click", () => {
-      setMode(mode === "signup" ? "login" : "signup");
+      setAuthMode(mode === "signup" ? "login" : "signup");
     });
 
-    // Créer le profil seulement s'il n'existe pas.
     async function ensureProfile(user) {
       const { data, error } = await db
         .from("profiles")
@@ -374,76 +601,66 @@
       if (data) return;
 
       const meta = user.user_metadata || {};
-
-      const { error: insertError } = await db
-        .from("profiles")
-        .insert({
-          id: user.id,
-          name: meta.name || "",
-          age: meta.age ? Number(meta.age) : null,
-          bio: "",
-          avatar_url: null
-        });
+      const { error: insertError } = await db.from("profiles").insert({
+        id: user.id,
+        name: meta.name || "",
+        age: meta.age ? Number(meta.age) : null,
+        bio: "",
+        avatar_url: null
+      });
 
       if (insertError) throw insertError;
     }
 
-    async function loadProfile(user) {
-      await ensureProfile(user);
+    async function loadMyProfile() {
+      await ensureProfile(currentUser);
 
       const { data, error } = await db
         .from("profiles")
         .select("id,name,age,bio,avatar_url")
-        .eq("id", user.id)
+        .eq("id", currentUser.id)
         .single();
 
       if (error) throw error;
 
-      $("profileName").value =
-        data.name || user.user_metadata?.name || "";
-
-      $("profileAge").value =
-        data.age || user.user_metadata?.age || "";
-
+      currentProfile = data;
+      $("profileName").value = data.name || "";
+      $("profileAge").value = data.age || "";
       $("bio").value = data.bio || "";
-      currentAvatarUrl = data.avatar_url || null;
-
-      $("avatarPreview").src = currentAvatarUrl ||
-        "https://placehold.co/220x220/fce7f3/be185d?text=Lovely";
+      $("avatarPreview").src = data.avatar_url || PLACEHOLDER;
     }
 
-    async function showSession(user) {
-      currentUser = user || null;
+    async function startApp(user) {
+      currentUser = user;
 
       if (!user) {
         $("authCard").classList.remove("hidden");
-        $("profileCard").classList.add("hidden");
+        $("app").classList.add("hidden");
+        if (chatRefreshInterval) clearInterval(chatRefreshInterval);
         return;
       }
 
       $("authCard").classList.add("hidden");
-      $("profileCard").classList.remove("hidden");
+      $("app").classList.remove("hidden");
       $("signedInEmail").textContent = user.email || "Mon compte";
 
       try {
-        await loadProfile(user);
+        await loadMyProfile();
+        await loadLikesAndMatches();
+        await loadDiscover();
       } catch (error) {
         console.error(error);
-        message(
-          "Connecté, mais le profil n'a pas pu être chargé : " +
-          friendlyError(error),
-          "error"
-        );
+        notify("Connecté, mais une partie des données n'a pas pu charger : " +
+          errorText(error), "error");
       }
     }
 
-    // INSCRIPTION ET CONNEXION
     $("authForm").addEventListener("submit", async event => {
       event.preventDefault();
-      clearMessage();
+      clearNotice();
 
       const button = $("authSubmit");
-      setBusy(button, true, "Veuillez patienter...");
+      busy(button, true, "Veuillez patienter...");
 
       try {
         const email = $("email").value.trim();
@@ -454,36 +671,27 @@
           const age = Number($("age").value);
 
           if (!name) throw new Error("Entrez votre prénom.");
-
-          if (!Number.isInteger(age) || age < 18 || age > 100) {
-            throw new Error("Vous devez avoir entre 18 et 100 ans.");
-          }
-
-          if (password.length < 6) {
-            throw new Error(
-              "Le mot de passe doit contenir au moins 6 caractères."
-            );
-          }
+          if (!Number.isInteger(age) || age < 18 || age > 100)
+            throw new Error("L'âge doit être compris entre 18 et 100 ans.");
+          if (password.length < 6)
+            throw new Error("Le mot de passe doit contenir au moins 6 caractères.");
 
           const { data, error } = await db.auth.signUp({
             email,
             password,
-            options: {
-              data: { name, age }
-            }
+            options: { data: { name, age } }
           });
 
           if (error) throw error;
 
           if (data.session && data.user) {
-            await showSession(data.user);
-            message("Votre compte Lovely a été créé !", "success");
+            await startApp(data.user);
+            notify("Bienvenue sur Lovely !", "success");
           } else {
-            setMode("login");
+            setAuthMode("login");
             $("email").value = email;
-
-            message(
-              "Compte créé. Vérifiez votre boîte e-mail, confirmez votre adresse, puis connectez-vous.",
+            notify(
+              "Compte créé. Confirmez votre adresse e-mail depuis votre boîte de réception, puis connectez-vous.",
               "success"
             );
           }
@@ -494,174 +702,8 @@
           });
 
           if (error) throw error;
-
-          await showSession(data.user);
-          message("Connexion réussie ! Bienvenue sur Lovely.", "success");
+          await startApp(data.user);
+          notify("Connexion réussie !", "success");
         }
       } catch (error) {
-        console.error(error);
-        message(friendlyError(error), "error");
-      } finally {
-        setBusy(button, false, "");
-      }
-    });
-
-    // APERÇU DE LA PHOTO
-    $("avatarFile").addEventListener("change", () => {
-      const file = $("avatarFile").files?.[0];
-      if (!file) return;
-
-      if (!["image/jpeg", "image/png", "image/webp"].includes(file.type)) {
-        $("avatarFile").value = "";
-        message("Choisissez une image JPG, PNG ou WebP.", "error");
-        return;
-      }
-
-      if (file.size > 3 * 1024 * 1024) {
-        $("avatarFile").value = "";
-        message("La photo ne doit pas dépasser 3 Mo.", "error");
-        return;
-      }
-
-      if (previewObjectUrl) URL.revokeObjectURL(previewObjectUrl);
-
-      previewObjectUrl = URL.createObjectURL(file);
-      $("avatarPreview").src = previewObjectUrl;
-      clearMessage();
-    });
-
-    // ENREGISTRER LE PROFIL ET LA PHOTO
-    $("profileForm").addEventListener("submit", async event => {
-      event.preventDefault();
-      clearMessage();
-
-      if (!currentUser) {
-        message("Veuillez vous connecter.", "error");
-        return;
-      }
-
-      const name = $("profileName").value.trim();
-      const age = Number($("profileAge").value);
-      const bio = $("bio").value.trim();
-      const file = $("avatarFile").files?.[0];
-      const button = $("saveProfileButton");
-
-      if (!name) {
-        message("Entrez votre prénom.", "error");
-        return;
-      }
-
-      if (!Number.isInteger(age) || age < 18 || age > 100) {
-        message("L'âge doit être compris entre 18 et 100 ans.", "error");
-        return;
-      }
-
-      setBusy(button, true, "Enregistrement...");
-
-      try {
-        let avatarUrl = currentAvatarUrl;
-
-        if (file) {
-          const ext = file.type === "image/png" ? "png" :
-            file.type === "image/webp" ? "webp" : "jpg";
-
-          const path = currentUser.id + "/" +
-            crypto.randomUUID() + "." + ext;
-
-          const { error: uploadError } = await db.storage
-            .from("avatars")
-            .upload(path, file, {
-              contentType: file.type,
-              upsert: false
-            });
-
-          if (uploadError) throw uploadError;
-
-          const { data } = db.storage
-            .from("avatars")
-            .getPublicUrl(path);
-
-          avatarUrl = data.publicUrl;
-        }
-
-        const { error } = await db.from("profiles").upsert({
-          id: currentUser.id,
-          name,
-          age,
-          bio,
-          avatar_url: avatarUrl
-        }, { onConflict: "id" });
-
-        if (error) throw error;
-
-        currentAvatarUrl = avatarUrl;
-        $("avatarFile").value = "";
-
-        if (previewObjectUrl) {
-          URL.revokeObjectURL(previewObjectUrl);
-          previewObjectUrl = null;
-        }
-
-        $("avatarPreview").src = avatarUrl ||
-          "https://placehold.co/220x220/fce7f3/be185d?text=Lovely";
-
-        message("Votre profil a été enregistré avec succès !", "success");
-      } catch (error) {
-        console.error(error);
-        message(friendlyError(error), "error");
-      } finally {
-        setBusy(button, false, "");
-      }
-    });
-
-    // DÉCONNEXION
-    $("logoutButton").addEventListener("click", async () => {
-      const button = $("logoutButton");
-      button.disabled = true;
-
-      try {
-        const { error } = await db.auth.signOut();
-        if (error) throw error;
-
-        currentUser = null;
-        $("profileForm").reset();
-        $("authForm").reset();
-        setMode("login");
-        await showSession(null);
-        message("Vous êtes déconnecté.", "success");
-      } catch (error) {
-        message(friendlyError(error), "error");
-      } finally {
-        button.disabled = false;
-      }
-    });
-
-    // RESTAURER LA SESSION AU CHARGEMENT
-    async function init() {
-      try {
-        const { data, error } = await db.auth.getSession();
-        if (error) throw error;
-
-        await showSession(data.session?.user || null);
-      } catch (error) {
-        console.error(error);
-        message(
-          "Impossible de charger la session. Vérifiez la clé Supabase, les politiques RLS et Internet.",
-          "error"
-        );
-      }
-    }
-
-    db.auth.onAuthStateChange(event => {
-      if (event === "SIGNED_OUT") {
-        currentUser = null;
-        $("authCard").classList.remove("hidden");
-        $("profileCard").classList.add("hidden");
-      }
-    });
-
-    setMode("signup");
-    init();
-  </script>
-</body>
-</html>
+       
