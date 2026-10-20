@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#ec4899">
-  <title>Lovely - Rencontres</title>
+  <title>Lovely ❤️ - Rencontres</title>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -13,11 +13,10 @@
     :root {
       --pink: #ec4899;
       --dark: #db2777;
-      --bg: #fff0f6;
+      --bg: #fff3f8;
       --text: #342330;
       --muted: #806b79;
       --border: #f1dce7;
-      --white: #fff;
     }
 
     * { box-sizing: border-box; }
@@ -31,13 +30,13 @@
     }
 
     header {
-      padding: 20px 16px;
+      padding: 22px 16px;
       background: white;
       border-bottom: 1px solid var(--border);
     }
 
     .header-inner {
-      max-width: 720px;
+      max-width: 650px;
       margin: auto;
     }
 
@@ -47,29 +46,26 @@
       font-weight: 900;
     }
 
-    header p {
-      color: var(--muted);
-      margin: 6px 0 0;
-    }
+    header p { color: var(--muted); margin: 6px 0 0; }
 
     main {
-      width: min(100% - 28px, 560px);
+      width: min(100% - 28px, 540px);
       margin: 28px auto;
       min-height: 60vh;
     }
 
     .card {
-      background: white;
       padding: 24px;
-      border: 1px solid var(--border);
-      border-radius: 24px;
-      box-shadow: 0 10px 35px #b82b6810;
       margin-bottom: 20px;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      box-shadow: 0 10px 35px #b82b6810;
     }
 
     h1, h2 { text-align: center; }
-    h1 { font-size: 28px; }
-    h2 { font-size: 23px; }
+    h1 { font-size: 26px; }
+    h2 { font-size: 22px; }
 
     .subtitle {
       color: var(--muted);
@@ -80,65 +76,57 @@
     label {
       display: block;
       margin: 16px 0 7px;
-      font-weight: 700;
-      font-size: 15px;
+      font-weight: bold;
+      font-size: 14px;
     }
 
     input, textarea {
       display: block;
       width: 100%;
-      padding: 14px;
+      padding: 13px;
       font: inherit;
       color: var(--text);
       background: #fffafd;
       border: 1px solid var(--border);
-      border-radius: 12px;
-      outline: none;
+      border-radius: 11px;
     }
 
     input:focus, textarea:focus {
+      outline: 2px solid #f9a8d4;
       border-color: var(--pink);
-      box-shadow: 0 0 0 3px #ec489920;
     }
 
-    textarea {
-      min-height: 110px;
-      resize: vertical;
-    }
+    textarea { min-height: 100px; resize: vertical; }
 
     button {
+      padding: 13px 16px;
       border: 0;
-      border-radius: 12px;
-      padding: 14px 16px;
+      border-radius: 11px;
       font: inherit;
-      font-weight: 700;
+      font-weight: bold;
       cursor: pointer;
     }
 
-    button:disabled {
-      opacity: .6;
-      cursor: wait;
-    }
+    button:disabled { opacity: .6; cursor: wait; }
 
     .primary {
-      display: block;
       width: 100%;
-      margin-top: 20px;
-      background: var(--pink);
+      margin-top: 18px;
       color: white;
+      background: var(--pink);
     }
 
     .primary:hover { background: var(--dark); }
 
     .secondary {
-      background: #fff0f6;
       color: var(--dark);
+      background: #fff0f6;
     }
 
     .switch {
       margin-top: 18px;
-      text-align: center;
       color: var(--muted);
+      text-align: center;
       line-height: 2;
     }
 
@@ -150,24 +138,24 @@
 
     .message {
       display: none;
-      margin-bottom: 18px;
-      padding: 14px;
-      border-radius: 12px;
+      margin-bottom: 16px;
+      padding: 13px;
+      border-radius: 11px;
       line-height: 1.6;
       overflow-wrap: anywhere;
     }
 
     .message.show { display: block; }
-    .success { color: #17683a; background: #e9f9ef; }
-    .error { color: #a21b32; background: #fff0f0; }
-    .info { color: #1d4e89; background: #eff6ff; }
+    .success { background: #e9f9ef; color: #17683a; }
+    .error { background: #fff0f0; color: #a21b32; }
+    .info { background: #eff6ff; color: #1d4e89; }
 
     .hidden { display: none !important; }
 
     .account-bar {
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      justify-content: space-between;
       flex-wrap: wrap;
       gap: 12px;
     }
@@ -179,23 +167,19 @@
       width: 120px;
       height: 120px;
       margin: 20px auto;
-      object-fit: cover;
-      border-radius: 50%;
       border: 4px solid #ffe0ed;
+      border-radius: 50%;
+      object-fit: cover;
       background: var(--bg);
     }
 
-    .hint {
-      color: var(--muted);
-      font-size: 12px;
-      line-height: 1.6;
-    }
+    .hint { color: var(--muted); font-size: 12px; line-height: 1.6; }
 
     footer {
-      text-align: center;
       padding: 25px 12px;
       color: var(--muted);
-      font-size: 13px;
+      text-align: center;
+      font-size: 12px;
     }
   </style>
 </head>
@@ -209,8 +193,7 @@
 </header>
 
 <main>
-  <div id="notice" class="message" role="status"
-       aria-live="polite"></div>
+  <div id="notice" class="message" role="status" aria-live="polite"></div>
 
   <section id="authCard" class="card">
     <h1 id="authTitle">Créer un compte</h1>
@@ -222,23 +205,20 @@
       <div id="signupFields">
         <label for="name">Prénom</label>
         <input id="name" type="text" maxlength="60"
-               autocomplete="given-name" placeholder="Ex. Sara"
-               required>
+          autocomplete="given-name" placeholder="Ex. Sara" required>
 
         <label for="age">Âge (18 ans minimum)</label>
         <input id="age" type="number" min="18" max="100"
-               inputmode="numeric" placeholder="18 ou plus"
-               required>
+          inputmode="numeric" placeholder="18 ou plus" required>
       </div>
 
       <label for="email">Adresse e-mail</label>
       <input id="email" type="email" autocomplete="email"
-             placeholder="vous@exemple.com" required>
+        placeholder="vous@exemple.com" required>
 
       <label for="password">Mot de passe</label>
       <input id="password" type="password" minlength="6"
-             autocomplete="new-password"
-             placeholder="6 caractères minimum" required>
+        autocomplete="new-password" placeholder="6 caractères minimum" required>
 
       <button id="authSubmit" class="primary" type="submit">
         Créer mon compte
@@ -249,9 +229,7 @@
       <span id="switchText">Vous avez déjà un compte ?</span>
       <button id="switchMode" type="button">Se connecter</button>
       <br>
-      <button id="resetPassword" type="button">
-        Mot de passe oublié ?
-      </button>
+      <button id="resetPassword" type="button">Mot de passe oublié ?</button>
     </div>
   </section>
 
@@ -285,9 +263,7 @@
       <input id="avatarFile" type="file"
         accept="image/jpeg,image/png,image/webp">
 
-      <p class="hint">
-        Formats acceptés : JPG, PNG ou WebP. Taille maximale : 3 Mo.
-      </p>
+      <p class="hint">JPG, PNG ou WebP. Maximum 3 Mo.</p>
 
       <button id="saveProfileButton" class="primary" type="submit">
         Enregistrer mon profil
@@ -301,67 +277,43 @@
 <script>
 "use strict";
 
-/* 1. Configuration Supabase */
-const SUPABASE_URL =
-  "https://tmarzbmxteddwzliluba.supabase.co";
-
+/* Configuration : URL du projet et clé publique */
+const SUPABASE_URL = "https://tmarzbmxteddwzliluba.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY =
   "sb_publishable_C6a8W0g77SAW-M9TNZLeWA_8_N71VT-";
 
-const notice = document.getElementById("notice");
-const authCard = document.getElementById("authCard");
-const profileCard = document.getElementById("profileCard");
-const authForm = document.getElementById("authForm");
-const profileForm = document.getElementById("profileForm");
-
-const authTitle = document.getElementById("authTitle");
-const authSubtitle = document.getElementById("authSubtitle");
-const signupFields = document.getElementById("signupFields");
-const authSubmit = document.getElementById("authSubmit");
-const switchText = document.getElementById("switchText");
-const switchMode = document.getElementById("switchMode");
-
-const nameInput = document.getElementById("name");
-const ageInput = document.getElementById("age");
-const emailInput = document.getElementById("email");
-const passwordInput = document.getElementById("password");
-
-const profileName = document.getElementById("profileName");
-const profileAge = document.getElementById("profileAge");
-const bioInput = document.getElementById("bio");
-const avatarFile = document.getElementById("avatarFile");
-const avatarPreview = document.getElementById("avatarPreview");
-const saveProfileButton = document.getElementById("saveProfileButton");
-const logoutButton = document.getElementById("logoutButton");
-
-let mode = "signup";
-let currentUser = null;
-let currentAvatarUrl = null;
-let loadingProfile = false;
-let previewObjectUrl = null;
+const $ = id => document.getElementById(id);
+const notice = $("notice");
+const authCard = $("authCard");
+const profileCard = $("profileCard");
+const authForm = $("authForm");
+const profileForm = $("profileForm");
+const authTitle = $("authTitle");
+const authSubtitle = $("authSubtitle");
+const signupFields = $("signupFields");
+const authSubmit = $("authSubmit");
+const switchText = $("switchText");
+const switchMode = $("switchMode");
+const nameInput = $("name");
+const ageInput = $("age");
+const emailInput = $("email");
+const passwordInput = $("password");
+const profileName = $("profileName");
+const profileAge = $("profileAge");
+const bioInput = $("bio");
+const avatarFile = $("avatarFile");
+const avatarPreview = $("avatarPreview");
+const saveProfileButton = $("saveProfileButton");
+const logoutButton = $("logoutButton");
 
 const DEFAULT_AVATAR =
   "https://placehold.co/240x240/fce7f3/be185d?text=Lovely";
 
-/* 2. Vérifier la configuration */
 let supabaseClient = null;
-
-try {
-  if (!window.supabase) {
-    throw new Error("La bibliothèque Supabase ne s'est pas chargée.");
-  }
-
-  if (!SUPABASE_PUBLISHABLE_KEY.startsWith("sb_publishable_")) {
-    throw new Error("Vérifiez votre Publishable key Supabase.");
-  }
-
-  supabaseClient = window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_PUBLISHABLE_KEY
-  );
-} catch (error) {
-  showMessage(error.message, "error");
-}
+let mode = "signup";
+let currentUser = null;
+let currentAvatarUrl = null;
+let previewObjectUrl = null;
 
 function showMessage(message, type = "info") {
   notice.textContent = message;
@@ -374,28 +326,27 @@ function clearMessage() {
 }
 
 function friendlyError(error) {
-  const m = error?.message || "Une erreur inconnue est survenue.";
+  const message = error?.message || "Une erreur est survenue.";
 
-  if (/invalid login credentials/i.test(m)) {
+  if (/invalid login credentials/i.test(message))
     return "E-mail ou mot de passe incorrect.";
-  }
-  if (/email not confirmed/i.test(m)) {
-    return "Confirmez votre adresse e-mail avant de vous connecter.";
-  }
-  if (/user already registered/i.test(m)) {
-    return "Cette adresse e-mail possède déjà un compte. Connectez-vous.";
-  }
-  if (/row-level security|permission denied/i.test(m)) {
-    return "Accès refusé. Vérifiez les politiques RLS de Supabase.";
-  }
-  if (/could not find the .* column/i.test(m)) {
-    return "Une colonne manque dans profiles. Exécutez le SQL fourni avant ce code.";
-  }
-  if (/failed to fetch|networkerror/i.test(m)) {
-    return "Connexion impossible. Vérifiez Internet et la configuration Supabase.";
-  }
 
-  return m;
+  if (/email not confirmed/i.test(message))
+    return "Confirmez votre adresse e-mail avant de vous connecter.";
+
+  if (/user already registered/i.test(message))
+    return "Cette adresse e-mail existe déjà. Connectez-vous.";
+
+  if (/row-level security|permission denied/i.test(message))
+    return "Accès refusé. Vérifiez les politiques RLS de Supabase.";
+
+  if (/could not find the .* column/i.test(message))
+    return "Une colonne manque dans profiles. Vérifiez le schéma de la base.";
+
+  if (/failed to fetch|networkerror|load failed/i.test(message))
+    return "Connexion impossible. Vérifiez Internet et l'URL Supabase.";
+
+  return message;
 }
 
 function setBusy(button, busy, normalText, busyText) {
@@ -403,26 +354,41 @@ function setBusy(button, busy, normalText, busyText) {
   button.textContent = busy ? busyText : normalText;
 }
 
-/* 3. Changer entre inscription et connexion */
+/* Initialiser Supabase */
+try {
+  if (!window.supabase) {
+    throw new Error("La bibliothèque Supabase ne s'est pas chargée.");
+  }
+
+  supabaseClient = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY
+  );
+} catch (error) {
+  showMessage(friendlyError(error), "error");
+  console.error(error);
+}
+
+/* Basculer entre inscription et connexion */
 function setMode(nextMode) {
   mode = nextMode;
-  const isSignup = mode === "signup";
+  const signup = mode === "signup";
 
-  authTitle.textContent = isSignup ? "Créer un compte" : "Connexion";
-  authSubtitle.textContent = isSignup
+  authTitle.textContent = signup ? "Créer un compte" : "Connexion";
+  authSubtitle.textContent = signup
     ? "Rejoignez Lovely et créez votre profil."
     : "Connectez-vous pour retrouver votre profil.";
 
-  signupFields.classList.toggle("hidden", !isSignup);
-  nameInput.required = isSignup;
-  ageInput.required = isSignup;
-  passwordInput.autocomplete = isSignup ? "new-password" : "current-password";
+  signupFields.classList.toggle("hidden", !signup);
+  nameInput.required = signup;
+  ageInput.required = signup;
+  passwordInput.autocomplete = signup ? "new-password" : "current-password";
 
-  authSubmit.textContent = isSignup ? "Créer mon compte" : "Se connecter";
-  switchText.textContent = isSignup
+  authSubmit.textContent = signup ? "Créer mon compte" : "Se connecter";
+  switchText.textContent = signup
     ? "Vous avez déjà un compte ?"
     : "Vous n'avez pas de compte ?";
-  switchMode.textContent = isSignup ? "Se connecter" : "Créer un compte";
+  switchMode.textContent = signup ? "Se connecter" : "Créer un compte";
 
   clearMessage();
 }
@@ -431,7 +397,7 @@ switchMode.addEventListener("click", () => {
   setMode(mode === "signup" ? "login" : "signup");
 });
 
-/* 4. Charger le profil */
+/* Charger ou créer le profil */
 async function loadProfile(user) {
   const { data, error } = await supabaseClient
     .from("profiles")
@@ -445,7 +411,6 @@ async function loadProfile(user) {
 
   if (!profile) {
     const metadata = user.user_metadata || {};
-
     const newProfile = {
       id: user.id,
       name: metadata.name || "",
@@ -454,15 +419,14 @@ async function loadProfile(user) {
       avatar_url: null
     };
 
-    const { data: inserted, error: insertError } =
-      await supabaseClient
-        .from("profiles")
-        .upsert(newProfile, { onConflict: "id" })
-        .select("id, name, age, bio, avatar_url")
-        .single();
+    const { data: created, error: createError } = await supabaseClient
+      .from("profiles")
+      .upsert(newProfile, { onConflict: "id" })
+      .select("id, name, age, bio, avatar_url")
+      .single();
 
-    if (insertError) throw insertError;
-    profile = inserted;
+    if (createError) throw createError;
+    profile = created;
   }
 
   profileName.value = profile.name || user.user_metadata?.name || "";
@@ -473,7 +437,7 @@ async function loadProfile(user) {
   avatarPreview.src = currentAvatarUrl || DEFAULT_AVATAR;
 }
 
-/* 5. Afficher le bon écran */
+/* Afficher l'écran correspondant à la session */
 async function renderSession(user) {
   currentUser = user || null;
 
@@ -485,59 +449,38 @@ async function renderSession(user) {
 
   authCard.classList.add("hidden");
   profileCard.classList.remove("hidden");
-  document.getElementById("signedInEmail").textContent =
-    user.email || "Compte Lovely";
+  $("signedInEmail").textContent = user.email || "Compte Lovely";
 
-  if (loadingProfile) return;
-  loadingProfile = true;
-
-  try {
-    await loadProfile(user);
-  } catch (error) {
-    console.error(error);
-    showMessage(
-      "Connexion réussie, mais chargement du profil impossible : " +
-      friendlyError(error),
-      "error"
-    );
-  } finally {
-    loadingProfile = false;
-  }
+  await loadProfile(user);
 }
 
-/* 6. Inscription et connexion */
-authForm.addEventListener("submit", async (event) => {
+/* Inscription et connexion */
+authForm.addEventListener("submit", async event => {
   event.preventDefault();
   clearMessage();
 
   if (!supabaseClient) {
-    showMessage("Configuration Supabase invalide. Vérifiez l'URL et la clé.", "error");
+    showMessage("Supabase n'est pas initialisé. Rechargez la page.", "error");
     return;
   }
 
   const email = emailInput.value.trim();
   const password = passwordInput.value;
-  const normalText = mode === "signup" ? "Créer mon compte" : "Se connecter";
-
-  if (!email || !password) {
-    showMessage("Remplissez l'e-mail et le mot de passe.", "error");
-    return;
-  }
+  const signup = mode === "signup";
+  const normalText = signup ? "Créer mon compte" : "Se connecter";
 
   setBusy(authSubmit, true, normalText, "Veuillez patienter...");
 
   try {
-    if (mode === "signup") {
+    if (signup) {
       const name = nameInput.value.trim();
       const age = Number(ageInput.value);
 
       if (!name) throw new Error("Entrez votre prénom.");
-      if (!Number.isInteger(age) || age < 18 || age > 100) {
+      if (!Number.isInteger(age) || age < 18 || age > 100)
         throw new Error("L'âge doit être compris entre 18 et 100 ans.");
-      }
-      if (password.length < 6) {
+      if (password.length < 6)
         throw new Error("Le mot de passe doit contenir au moins 6 caractères.");
-      }
 
       const { data, error } = await supabaseClient.auth.signUp({
         email,
@@ -549,12 +492,12 @@ authForm.addEventListener("submit", async (event) => {
 
       if (data.session && data.user) {
         await renderSession(data.user);
-        showMessage("Bienvenue sur Lovely ! Votre compte est créé.", "success");
+        showMessage("Bienvenue sur Lovely !", "success");
       } else {
         setMode("login");
         emailInput.value = email;
         showMessage(
-          "Compte créé ! Vérifiez votre boîte e-mail et confirmez votre adresse. Ensuite, connectez-vous.",
+          "Compte créé ! Consultez votre e-mail pour confirmer votre adresse, puis connectez-vous.",
           "success"
         );
       }
@@ -582,14 +525,17 @@ authForm.addEventListener("submit", async (event) => {
   }
 });
 
-/* 7. Mot de passe oublié */
-document.getElementById("resetPassword").addEventListener("click", async () => {
-  if (!supabaseClient) return;
+/* Mot de passe oublié */
+$("resetPassword").addEventListener("click", async () => {
+  if (!supabaseClient) {
+    showMessage("Supabase n'est pas disponible.", "error");
+    return;
+  }
 
   const email = emailInput.value.trim();
 
   if (!email) {
-    showMessage("Entrez votre adresse e-mail dans le champ ci-dessus.", "info");
+    showMessage("Entrez d'abord votre adresse e-mail.", "info");
     emailInput.focus();
     return;
   }
@@ -602,7 +548,7 @@ document.getElementById("resetPassword").addEventListener("click", async () => {
     if (error) throw error;
 
     showMessage(
-      "Si cette adresse est enregistrée, vous recevrez un e-mail pour réinitialiser le mot de passe.",
+      "Si cette adresse est enregistrée, un e-mail de réinitialisation sera envoyé.",
       "success"
     );
   } catch (error) {
@@ -610,7 +556,7 @@ document.getElementById("resetPassword").addEventListener("click", async () => {
   }
 });
 
-/* 8. Aperçu de la photo */
+/* Prévisualiser la photo */
 avatarFile.addEventListener("change", () => {
   clearMessage();
   const file = avatarFile.files?.[0];
@@ -634,8 +580,8 @@ avatarFile.addEventListener("change", () => {
   avatarPreview.src = previewObjectUrl;
 });
 
-/* 9. Enregistrer le profil et la photo */
-profileForm.addEventListener("submit", async (event) => {
+/* Enregistrer le profil et la photo */
+profileForm.addEventListener("submit", async event => {
   event.preventDefault();
   clearMessage();
 
@@ -665,17 +611,16 @@ profileForm.addEventListener("submit", async (event) => {
     let avatarUrl = currentAvatarUrl;
 
     if (file) {
-      if (file.size > 3 * 1024 * 1024) {
+      if (file.size > 3 * 1024 * 1024)
         throw new Error("La photo doit faire moins de 3 Mo.");
-      }
 
-      const ext = file.type === "image/png" ? "png"
+      const extension = file.type === "image/png" ? "png"
         : file.type === "image/webp" ? "webp" : "jpg";
 
-      const path = currentUser.id + "/" + crypto.randomUUID() + "." + ext;
+      const path = currentUser.id + "/" + crypto.randomUUID() + "." + extension;
 
-      const { error: uploadError } = await supabaseClient
-        .storage.from("avatars")
+      const { error: uploadError } = await supabaseClient.storage
+        .from("avatars")
         .upload(path, file, {
           contentType: file.type,
           upsert: false
@@ -683,37 +628,32 @@ profileForm.addEventListener("submit", async (event) => {
 
       if (uploadError) throw uploadError;
 
-      const { data } = supabaseClient.storage.from("avatars").getPublicUrl(path);
-      avatarUrl = data.publicUrl;
+      avatarUrl = supabaseClient.storage.from("avatars").getPublicUrl(path)
+        .data.publicUrl;
     }
 
-    const { error: profileError } = await supabaseClient
-      .from("profiles")
-      .upsert({
-        id: currentUser.id,
-        name,
-        age,
-        bio,
-        avatar_url: avatarUrl
-      }, { onConflict: "id" });
+    const { error } = await supabaseClient.from("profiles").upsert({
+      id: currentUser.id,
+      name,
+      age,
+      bio,
+      avatar_url: avatarUrl
+    }, { onConflict: "id" });
 
-    if (profileError) throw profileError;
-
-    currentAvatarUrl = avatarUrl;
-    avatarFile.value = "";
-
-    if (previewObjectUrl) {
-      URL.revokeObjectURL(previewObjectUrl);
-      previewObjectUrl = null;
-    }
-
-    avatarPreview.src = avatarUrl || DEFAULT_AVATAR;
+    if (error) throw error;
 
     const { error: metadataError } = await supabaseClient.auth.updateUser({
       data: { name, age }
     });
 
-    if (metadataError) console.warn(metadataError);
+    if (metadataError) console.warn("Métadonnées:", metadataError);
+
+    currentAvatarUrl = avatarUrl;
+    avatarPreview.src = avatarUrl || DEFAULT_AVATAR;
+    avatarFile.value = "";
+
+    if (previewObjectUrl) URL.revokeObjectURL(previewObjectUrl);
+    previewObjectUrl = null;
 
     showMessage("Votre profil a été enregistré avec succès !", "success");
   } catch (error) {
@@ -724,7 +664,7 @@ profileForm.addEventListener("submit", async (event) => {
   }
 });
 
-/* 10. Déconnexion */
+/* Déconnexion */
 logoutButton.addEventListener("click", async () => {
   if (!supabaseClient) return;
 
@@ -748,13 +688,10 @@ logoutButton.addEventListener("click", async () => {
   }
 });
 
-/* 11. Restaurer la session au chargement */
+/* Restaurer la session au chargement */
 async function init() {
   if (!supabaseClient) {
-    showMessage(
-      "Configuration Supabase introuvable. Vérifiez la clé Publishable dans index.html.",
-      "error"
-    );
+    showMessage("Impossible d'initialiser Supabase. Vérifiez la connexion.", "error");
     return;
   }
 
@@ -763,7 +700,14 @@ async function init() {
     if (error) throw error;
     await renderSession(data.session?.user || null);
   } catch (error) {
-    console.error(error);
+    console.error("Erreur au démarrage:", error);
     showMessage(friendlyError(error), "error");
   }
 }
+
+/* IMPORTANT : lancer réellement l'initialisation */
+setMode("signup");
+init();
+</script>
+</body>
+</html>
